@@ -1107,19 +1107,19 @@
           action: action, // 'checkout' or 'return'
           byName: byName || '',
           byEmail: byEmail || '',
-          date: action === 'checkout' ? (date || new Date().toISOString()) : (date || '')
+          date: date || ''
         };
         
         const response = await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
-          mode: 'no-cors', // Used to avoid CORS preflight issues
+          mode: 'no-cors', // Avoids CORS preflight; response cannot be read
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(payload)
         });
         
-        // Note: With no-cors, we can't read the response, but the request is sent
+        // Note: With no-cors mode, we can't read the response, but the request is sent
         console.log(`✓ Sent ${action} update to Google Sheets for book ${bookId}`);
       } catch (error) {
         console.warn(`Could not write ${action} to Google Sheets:`, error.message);
