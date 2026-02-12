@@ -98,8 +98,6 @@
           <div class="filters">
             <input id="langFilter" type="text" placeholder="Filter by language" title="Filter by language">
             <input id="locFilter" type="text" placeholder="Filter by location" title="Filter by location">
-            <button class="btn" id="addBtn">+ Add Book</button>
-            <button class="btn secondary" id="importBtn">Import</button>
             <button class="btn ghost" id="exportBtn">Export</button>
             <button class="btn secondary" id="signinBtn">Sign in</button>
           </div>
@@ -117,10 +115,6 @@
           <div id="statsArea" class="meta"></div>
           <hr style="border:none; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0;">
           <h4 style="margin:0 0 8px 0">Quick actions</h4>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button class="btn secondary" id="clearAllBtn">Clear All</button>
-            <button class="btn secondary" id="importSampleBtn">Import Sample</button>
-          </div>
           <div style="margin-top:12px;">
             <div class="small">Tip: Map Orca Scan columns like <span class="pill">ISBN</span>, <span class="pill">Title</span>, <span class="pill">Authors</span>.</div>
           </div>
@@ -265,10 +259,6 @@
             </div>
             <div style="min-width:220px; text-align:right;">
               <div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>
-              <div class="row-actions">
-                <button class="btn secondary" data-action="edit" data-id="${b.id}">Edit</button>
-                <button class="btn ghost" data-action="delete" data-id="${b.id}">Delete</button>
-              </div>
             </div>
           </div>
         `;
@@ -284,16 +274,6 @@
           if(target.closest('button')) return;
           const id = el.dataset.id;
           openDetailModal(id);
-        });
-      });
-
-      booksContainer.querySelectorAll('button[data-action]').forEach(btn=>{
-        btn.addEventListener('click', (e)=>{
-          e.stopPropagation();
-          const id = btn.dataset.id;
-          const action = btn.dataset.action;
-          if(action==='edit') openEditModal(id);
-          if(action==='delete') deleteBook(id);
         });
       });
 
@@ -350,7 +330,6 @@
     }
 
     /* ======= Add/Edit modal ======= */
-    document.getElementById('addBtn').addEventListener('click', ()=> openAddModal());
     function openAddModal(prefill={}){
       const html = `
         <h3>${prefill.id ? 'Edit Book' : 'Add Book'}</h3>
@@ -638,7 +617,6 @@
 
     /* ======= Import / Export (with mapping) ======= */
     /* The import/export code is the same as before (keeps XLSX lazy-loading fallback) */
-    document.getElementById('importBtn').addEventListener('click', ()=> openImportModal());
     document.getElementById('exportBtn').addEventListener('click', ()=> openExportOptions());
 
     function openExportOptions(){
@@ -992,21 +970,6 @@
       return s;
     }
 
-    /* ======= Sample data & actions ======= */
-    document.getElementById('clearAllBtn').addEventListener('click', ()=>{
-      if(!confirm('Clear all books from localStorage? This cannot be undone.')) return;
-      books = [];
-      saveBooks(books);
-      render();
-    });
-    document.getElementById('importSampleBtn').addEventListener('click', ()=>{
-      const sample = [
-        {isbn:'9780261102217', title:'The Hobbit', quantity:1, description:'A classic fantasy novel', authors:'J.R.R. Tolkien', publisher:'Allen & Unwin', published:'1937-09-21', pages:'310', language:'English', location:'Shelf A1'},
-        {isbn:'9780132350884', title:'Clean Code', quantity:1, description:'A handbook of agile software craftsmanship', authors:'Robert C. Martin', publisher:'Prentice Hall', published:'2008-08-01', pages:'464', language:'English', location:'Shelf B2'}
-      ];
-      sample.forEach(s => addBook(s));
-    });
-
     /* ======= Search & filters events ======= */
     [searchInput, langFilter, locFilter, sortSelect].forEach(el=>{
       el.addEventListener('input', debounce(render, 180));
@@ -1023,7 +986,7 @@
 
     /* ======= Init (safe) ======= */
     try{
-      console.log('Library script loaded — DOM ready:', !!document.getElementById('addBtn'));
+      console.log('Library script loaded — DOM ready:', !!document.getElementById('exportBtn'));
       render();
     }catch(err){
       console.error('Initialization error', err);
