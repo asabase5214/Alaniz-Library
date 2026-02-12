@@ -914,23 +914,24 @@
     function autoMapHeaders(headers){
       const map = {};
       headers.forEach(h=>{
-        const key = h.toLowerCase();
+        const key = h.toLowerCase().trim();
         if(/^id$/.test(key)) map[h]='id';
-        else if(/checkedoutbyname|checked_out_by_name/.test(key)) map[h]='checkedOutByName';
-        else if(/checkedoutbyemail|checked_out_by_email/.test(key)) map[h]='checkedOutByEmail';
-        else if(/checkedoutdate|checked_out_date/.test(key)) map[h]='checkedOutDate';
-        else if(/isbn/.test(key)) map[h]='isbn';
-        else if(/title/.test(key)) map[h]='title';
-        else if(/quantity|qty|count/.test(key)) map[h]='quantity';
-        else if(/desc|description|notes/.test(key)) map[h]='description';
-        else if(/author|authors/.test(key)) map[h]='authors';
-        else if(/publisher/.test(key)) map[h]='publisher';
-        else if(/published|date/.test(key)) map[h]='published';
-        else if(/page|pages/.test(key)) map[h]='pages';
-        else if(/lang|language/.test(key)) map[h]='language';
-        else if(/location|shelf|place/.test(key)) map[h]='location';
+        else if(/^(checkedoutbyname|checked_out_by_name)$/.test(key)) map[h]='checkedOutByName';
+        else if(/^(checkedoutbyemail|checked_out_by_email)$/.test(key)) map[h]='checkedOutByEmail';
+        else if(/^(checkedoutdate|checked_out_date)$/.test(key)) map[h]='checkedOutDate';
+        else if(/^isbn$/.test(key)) map[h]='isbn';
+        else if(/^title$/.test(key)) map[h]='title';
+        else if(/^(quantity|qty|count)$/.test(key)) map[h]='quantity';
+        else if(/^(desc|description|notes)$/.test(key)) map[h]='description';
+        else if(/^(author|authors)$/.test(key)) map[h]='authors';
+        else if(/^publisher$/.test(key)) map[h]='publisher';
+        else if(/^(published|publishdate|publish_date)$/.test(key)) map[h]='published';
+        else if(/^(page|pages)$/.test(key)) map[h]='pages';
+        else if(/^(lang|language)$/.test(key)) map[h]='language';
+        else if(/^(location|shelf|place)$/.test(key)) map[h]='location';
         else map[h]='ignore';
       });
+      console.log('Header mapping:', map);
       return map;
     }
 
@@ -1018,6 +1019,28 @@
     /* ======= Init (safe) ======= */
     try{
       console.log('Library script loaded — DOM ready:', !!document.getElementById('exportBtn'));
+      
+      // Check if user is using CSV URL and warn them
+      if (GOOGLE_SHEET_URL && !GOOGLE_SHEET_URL.includes('script.google.com') && GOOGLE_SHEET_URL.includes('docs.google.com')) {
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.warn('⚠️  CONFIGURATION ISSUE DETECTED');
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.warn('You are using a CSV URL from Google Sheets.');
+        console.warn('');
+        console.warn('PROBLEMS WITH CSV URLS:');
+        console.warn('  ❌ Checkout/return changes will NOT sync across devices');
+        console.warn('  ❌ Book titles and other fields may not load correctly');
+        console.warn('');
+        console.warn('SOLUTION:');
+        console.warn('  ✅ Deploy a Google Apps Script web app instead');
+        console.warn('  ✅ Replace GOOGLE_SHEET_URL with your Apps Script URL');
+        console.warn('  ✅ See GOOGLE_SHEETS_SETUP.md for step-by-step instructions');
+        console.warn('');
+        console.warn('Expected URL format:');
+        console.warn('  https://script.google.com/macros/s/.../exec');
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      }
+      
       render();
     }catch(err){
       console.error('Initialization error', err);
@@ -1050,7 +1073,7 @@
         let booksData = [];
         
         // Check if response is JSON (from Google Apps Script) or CSV
-        if (contentType.includes('application/json') || data.trim().startsWith('[')) {
+        if (contentType.includes('application/json') || data.trim().startsWith('[') || data.trim().startsWith('{')) {
           // JSON format from Google Apps Script
           booksData = JSON.parse(data);
           // Ensure JSON books have IDs and convert checkout fields
@@ -1058,13 +1081,20 @@
             const withId = b.id ? b : { ...b, id: uid() };
             return convertCheckoutFields(withId);
           });
-          console.log('Parsed JSON data from Google Apps Script');
+          console.log('✓ Parsed JSON data from Google Apps Script');
+          console.log(`Sample book data:`, booksData[0]);
         } else {
           // CSV format from published sheet
+          console.warn('⚠️ Using CSV format from published sheet.');
+          console.warn('⚠️ IMPORTANT: Checkout/return sync will NOT work with CSV URLs!');
+          console.warn('⚠️ To enable checkout sync, you must use a Google Apps Script URL.');
+          console.warn('⚠️ See GOOGLE_SHEETS_SETUP.md for instructions.');
+          
           const parsed = parseCSV(data);
+          console.log('CSV headers found:', parsed.hdrs);
           // Normalize headers to canonical field names and ensure IDs
           booksData = normalizeBookData(parsed.rows, parsed.hdrs);
-          console.log('Parsed CSV data from published sheet');
+          console.log('Normalized book data sample:', booksData[0]);
         }
         
         if (booksData.length === 0) {
@@ -1097,7 +1127,20 @@
       
       // Only works with Google Apps Script URLs (not CSV)
       if (!GOOGLE_SHEET_URL.includes('script.google.com')) {
-        console.log('Checkout/return sync only works with Google Apps Script URLs');
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.warn('⚠️  CHECKOUT SYNC NOT AVAILABLE');
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.warn('Checkout/return sync only works with Google Apps Script URLs.');
+        console.warn('You are currently using a CSV URL which is read-only.');
+        console.warn('');
+        console.warn('The change was saved locally on THIS device only.');
+        console.warn('Other users will NOT see this checkout/return.');
+        console.warn('');
+        console.warn('To enable sync across all users:');
+        console.warn('  1. Deploy a Google Apps Script web app');
+        console.warn('  2. Update GOOGLE_SHEET_URL in index.html');
+        console.warn('  3. See GOOGLE_SHEETS_SETUP.md for instructions');
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         return;
       }
       
