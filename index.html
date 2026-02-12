@@ -948,6 +948,21 @@
       return map;
     }
 
+    function normalizeBookData(rows, hdrs){
+      // Apply header mapping to normalize field names
+      const headerMap = autoMapHeaders(hdrs);
+      return rows.map(row => {
+        const normalized = {};
+        for (const [originalHeader, value] of Object.entries(row)) {
+          const mappedField = headerMap[originalHeader];
+          if (mappedField && mappedField !== 'ignore') {
+            normalized[mappedField] = value;
+          }
+        }
+        return normalized;
+      });
+    }
+
     /* ======= Utilities ======= */
     function escapeHtml(s){
       if(s===null || s===undefined) return '';
@@ -1048,7 +1063,8 @@
         } else {
           // CSV format from published sheet
           const parsed = parseCSV(data);
-          booksData = parsed.rows;
+          // Normalize headers to canonical field names (title, authors, etc.)
+          booksData = normalizeBookData(parsed.rows, parsed.hdrs);
           console.log('Parsed CSV data from published sheet');
         }
         
