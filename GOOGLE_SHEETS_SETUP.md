@@ -1,5 +1,7 @@
 # Google Sheets Setup Guide
 
+> **⚠️ IMPORTANT:** After deploying your Apps Script, you **MUST** update the `GOOGLE_SHEET_URL` in `index.html` with your Apps Script URL. If you skip this step, books will show as "Untitled" and checkouts won't sync. See step 5 below or read `TROUBLESHOOTING.md` for help.
+
 This library app can sync with Google Sheets to maintain your book collection. Due to browser CORS restrictions, there are two ways to set this up:
 
 ## Option 1: Google Apps Script (Recommended - No CORS Issues)
@@ -132,11 +134,27 @@ This method creates a web app that bypasses CORS restrictions and works reliably
    - **Authorize** the script when prompted
    - Copy the **Web app URL** (looks like: `https://script.google.com/macros/s/...../exec`)
 
-5. **Update the library app:**
-   - Open `index.html`
-   - Find the line with `const GOOGLE_SHEET_URL = '...'`
-   - Replace it with your Web app URL
+5. **⚠️ CRITICAL: Update the library app:**
+   - Open `index.html` in a text editor
+   - Scroll to near the end of the file (in the configuration section)
+   - Find this line: `const GOOGLE_SHEET_URL = '...'`
+   - **Replace the ENTIRE URL** with your Apps Script Web app URL from step 4
+   - Example:
+     ```javascript
+     // Before (CSV URL - WRONG):
+     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-...';
+     
+     // After (Apps Script URL - CORRECT):
+     const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+     ```
    - Save the file
+   - Clear your browser cache and refresh the app
+   - Check the browser console (F12) to verify it says: `✓ Parsed JSON data from Google Apps Script`
+
+   **⚠️ If you skip this step:**
+   - All books will show as "Untitled"
+   - Checkout/return will NOT sync across devices
+   - See `TROUBLESHOOTING.md` for help
 
 ### Benefits:
 - ✅ No CORS issues
@@ -201,6 +219,14 @@ This means the app works **offline** and continues functioning even if Google Sh
 ---
 
 ## Troubleshooting
+
+### ⚠️ Books show "Untitled" or checkout doesn't sync
+
+**This is the most common issue!** See the dedicated **`TROUBLESHOOTING.md`** file for detailed solutions.
+
+**Quick fix:** You need to update `GOOGLE_SHEET_URL` in `index.html` with your Apps Script URL (from step 4 above), not a CSV URL.
+
+---
 
 ### "Could not sync with Google Sheets" in console
 
