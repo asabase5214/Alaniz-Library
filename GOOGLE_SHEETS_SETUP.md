@@ -10,8 +10,11 @@ This method creates a web app that bypasses CORS restrictions and works reliably
 
 1. **Open your Google Sheet** with your book data
    - The first row should contain headers (column names)
-   - Recommended headers: `isbn`, `title`, `quantity`, `description`, `authors`, `publisher`, `published`, `pages`, `language`, `location`
-   - Only `title` is strongly recommended; other fields are optional
+   - **Required headers:** `id`, `title`
+   - **Recommended headers:** `isbn`, `quantity`, `description`, `authors`, `publisher`, `published`, `pages`, `language`, `location`
+   - **Checkout columns (auto-created if missing):** `checkedOutByName`, `checkedOutByEmail`, `checkedOutDate`
+   - The `id` column should contain unique identifiers for each book
+   - The checkout columns will be automatically added by the script when someone checks out a book
    - Headers are case-insensitive
 
 2. **Create an Apps Script:**
@@ -37,6 +40,85 @@ This method creates a web app that bypasses CORS restrictions and works reliably
      return ContentService
        .createTextOutput(JSON.stringify(books))
        .setMimeType(ContentService.MimeType.JSON);
+   }
+   
+   function doPost(e) {
+     try {
+       var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+       var data = sheet.getDataRange().getValues();
+       var headers = data[0];
+       
+       // Parse the incoming JSON
+       var params = JSON.parse(e.postData.contents);
+       var bookId = params.id;
+       var action = params.action; // 'checkout' or 'return'
+       
+       // Find the book row by ID
+       var idIndex = headers.indexOf('id');
+       if (idIndex === -1) {
+         return ContentService
+           .createTextOutput(JSON.stringify({error: 'ID column not found'}))
+           .setMimeType(ContentService.MimeType.JSON);
+       }
+       
+       // Find indices for checkout columns (create if they don't exist)
+       var checkedOutByNameIndex = headers.indexOf('checkedOutByName');
+       var checkedOutByEmailIndex = headers.indexOf('checkedOutByEmail');
+       var checkedOutDateIndex = headers.indexOf('checkedOutDate');
+       
+       // Add new columns if they don't exist
+       if (checkedOutByNameIndex === -1) {
+         headers.push('checkedOutByName');
+         checkedOutByNameIndex = headers.length - 1;
+         sheet.getRange(1, checkedOutByNameIndex + 1).setValue('checkedOutByName');
+       }
+       if (checkedOutByEmailIndex === -1) {
+         headers.push('checkedOutByEmail');
+         checkedOutByEmailIndex = headers.length - 1;
+         sheet.getRange(1, checkedOutByEmailIndex + 1).setValue('checkedOutByEmail');
+       }
+       if (checkedOutDateIndex === -1) {
+         headers.push('checkedOutDate');
+         checkedOutDateIndex = headers.length - 1;
+         sheet.getRange(1, checkedOutDateIndex + 1).setValue('checkedOutDate');
+       }
+       
+       // Find the book row
+       var rowIndex = -1;
+       for (var i = 1; i < data.length; i++) {
+         if (data[i][idIndex] == bookId) {
+           rowIndex = i + 1; // +1 because sheet rows are 1-indexed
+           break;
+         }
+       }
+       
+       if (rowIndex === -1) {
+         return ContentService
+           .createTextOutput(JSON.stringify({error: 'Book not found'}))
+           .setMimeType(ContentService.MimeType.JSON);
+       }
+       
+       // Update the checkout status
+       if (action === 'checkout') {
+         sheet.getRange(rowIndex, checkedOutByNameIndex + 1).setValue(params.byName || '');
+         sheet.getRange(rowIndex, checkedOutByEmailIndex + 1).setValue(params.byEmail || '');
+         // Use provided date or generate current timestamp if not provided
+         sheet.getRange(rowIndex, checkedOutDateIndex + 1).setValue(params.date || new Date().toISOString());
+       } else if (action === 'return') {
+         // Clear all checkout fields on return
+         sheet.getRange(rowIndex, checkedOutByNameIndex + 1).setValue('');
+         sheet.getRange(rowIndex, checkedOutByEmailIndex + 1).setValue('');
+         sheet.getRange(rowIndex, checkedOutDateIndex + 1).setValue('');
+       }
+       
+       return ContentService
+         .createTextOutput(JSON.stringify({success: true}))
+         .setMimeType(ContentService.MimeType.JSON);
+     } catch (error) {
+       return ContentService
+         .createTextOutput(JSON.stringify({error: error.toString()}))
+         .setMimeType(ContentService.MimeType.JSON);
+     }
    }
    ```
 
@@ -88,6 +170,8 @@ This method is simpler but may not work in all browsers due to CORS restrictions
 ### Note:
 This method may be blocked by browser CORS policies. If you see "Failed to fetch" in the console, use Option 1 instead.
 
+**Important:** Checkout/return functionality will NOT sync to Google Sheets when using the CSV method. This is because CSV URLs are read-only. For shared checkout/return status across all users, you must use Option 1 (Google Apps Script).
+
 ---
 
 ## Option 3: Local Storage Only
@@ -99,6 +183,8 @@ If you don't want to use Google Sheets at all:
 3. Set it to an empty string: `const GOOGLE_SHEET_URL = '';`
 4. The app will work entirely with localStorage
 
+**Note:** With this option, checkout/return status will only be stored locally on each user's device and will not be shared across users.
+
 ---
 
 ## How the Sync Works
@@ -107,8 +193,10 @@ If you don't want to use Google Sheets at all:
 - **In background:** The app tries to sync with Google Sheets
 - **If sync succeeds:** Data is updated and saved to localStorage
 - **If sync fails:** App continues working with cached data
+- **On checkout/return:** The app updates Google Sheets immediately via POST request and also saves to localStorage
+- **Sharing checkout status:** When you check out or return a book, it's written to Google Sheets so all users see the same status on their next page load or sync
 
-This means the app works **offline** and continues functioning even if Google Sheets is unavailable.
+This means the app works **offline** and continues functioning even if Google Sheets is unavailable, but checkout/return status will only be shared when Google Sheets sync is working.
 
 ---
 
@@ -141,14 +229,29 @@ This means both:
 - Or manually add books using "+ Add Book"
 - Or fix the Google Sheets sync using Option 1
 
+### Checkout/return status not shared across users
+
+If checkout/return changes aren't visible to other users:
+
+1. **Verify you're using Google Apps Script (Option 1):** Checkout/return sync only works with Google Apps Script URLs, not published CSV URLs
+2. **Check the console for errors:** Look for messages like "Sent checkout update to Google Sheets"
+3. **Ensure your Google Sheet has an `id` column:** The Apps Script needs book IDs to update the correct rows
+4. **Have other users refresh the page:** Changes sync on page load
+5. **Check the checkout columns in your Google Sheet:** Verify that `checkedOutByName`, `checkedOutByEmail`, and `checkedOutDate` columns are being updated
+
+If using a published CSV URL (Option 2), checkout/return will only work locally and won't sync.
+
 ---
 
 ## Data Format
 
 Your Google Sheet should have these columns (case-insensitive):
 
-| isbn | title | quantity | description | authors | publisher | published | pages | language | location |
-|------|-------|----------|-------------|---------|-----------|-----------|-------|----------|----------|
-| 9780132350884 | Clean Code | 1 | A handbook... | Robert C. Martin | Prentice Hall | 2008-08-01 | 464 | English | Shelf A |
+| id | isbn | title | quantity | description | authors | publisher | published | pages | language | location | checkedOutByName | checkedOutByEmail | checkedOutDate |
+|----|------|-------|----------|-------------|---------|-----------|-----------|-------|----------|----------|------------------|-------------------|----------------|
+| b123abc | 9780132350884 | Clean Code | 1 | A handbook... | Robert C. Martin | Prentice Hall | 2008-08-01 | 464 | English | Shelf A | | | |
 
-Not all columns are required, but `title` is recommended for best experience.
+**Required columns:** `id`, `title`.
+**Checkout columns:** `checkedOutByName`, `checkedOutByEmail`, `checkedOutDate` (these will be automatically added by the Apps Script if they don't exist).
+
+The `id` column must contain unique identifiers for each book. When you check out or return books through the app, the checkout columns will be automatically updated in Google Sheets, making the status visible to all users.
