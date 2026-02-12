@@ -555,6 +555,8 @@
       };
       saveBooks(books);
       render();
+      // Sync to Google Sheets
+      writeCheckoutToSheet(bookId, 'checkout', byName, byEmail, books[idx].checkedOut.date);
     }
 
     function performReturn(bookId){
@@ -563,6 +565,8 @@
       books[idx].checkedOut = null;
       saveBooks(books);
       render();
+      // Sync to Google Sheets
+      writeCheckoutToSheet(bookId, 'return', '', '', '');
     }
 
     /* ======= Sign-in modal ======= */
@@ -911,7 +915,11 @@
       const map = {};
       headers.forEach(h=>{
         const key = h.toLowerCase();
-        if(/isbn/.test(key)) map[h]='isbn';
+        if(/^id$/.test(key)) map[h]='id';
+        else if(/checkedoutbyname|checked_out_by_name/.test(key)) map[h]='checkedOutByName';
+        else if(/checkedoutbyemail|checked_out_by_email/.test(key)) map[h]='checkedOutByEmail';
+        else if(/checkedoutdate|checked_out_date/.test(key)) map[h]='checkedOutDate';
+        else if(/isbn/.test(key)) map[h]='isbn';
         else if(/title/.test(key)) map[h]='title';
         else if(/quantity|qty|count/.test(key)) map[h]='quantity';
         else if(/desc|description|notes/.test(key)) map[h]='description';
@@ -941,11 +949,30 @@
         if (!normalized.id) {
           normalized.id = uid();
         }
-        return normalized;
+        // Convert checkout fields to checkedOut object format
+        return convertCheckoutFields(normalized);
       });
     }
 
     /* ======= Utilities ======= */
+    function convertCheckoutFields(book) {
+      // Convert checkout fields to checkedOut object format
+      if (book.checkedOutByName || book.checkedOutByEmail || book.checkedOutDate) {
+        const result = { ...book };
+        result.checkedOut = {
+          byName: book.checkedOutByName || '',
+          byEmail: book.checkedOutByEmail || '',
+          date: book.checkedOutDate || ''
+        };
+        // Remove the individual fields
+        delete result.checkedOutByName;
+        delete result.checkedOutByEmail;
+        delete result.checkedOutDate;
+        return result;
+      }
+      return book;
+    }
+    
     function escapeHtml(s){
       if(s===null || s===undefined) return '';
       return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
@@ -1026,8 +1053,11 @@
         if (contentType.includes('application/json') || data.trim().startsWith('[')) {
           // JSON format from Google Apps Script
           booksData = JSON.parse(data);
-          // Ensure JSON books have IDs (avoid mutation)
-          booksData = booksData.map(b => b.id ? b : { ...b, id: uid() });
+          // Ensure JSON books have IDs and convert checkout fields
+          booksData = booksData.map(b => {
+            const withId = b.id ? b : { ...b, id: uid() };
+            return convertCheckoutFields(withId);
+          });
           console.log('Parsed JSON data from Google Apps Script');
         } else {
           // CSV format from published sheet
@@ -1055,6 +1085,45 @@
         console.log('Using locally cached data. You can still add, edit, and manage books.');
         // Don't show error UI - the app already rendered from localStorage
         // Users can still use the app with cached data or add new books
+      }
+    }
+
+    /* Write checkout/return data to Google Sheets */
+    async function writeCheckoutToSheet(bookId, action, byName, byEmail, date) {
+      if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.trim() === '') {
+        console.log('No Google Sheets URL configured, skipping sync');
+        return;
+      }
+      
+      // Only works with Google Apps Script URLs (not CSV)
+      if (!GOOGLE_SHEET_URL.includes('script.google.com')) {
+        console.log('Checkout/return sync only works with Google Apps Script URLs');
+        return;
+      }
+      
+      try {
+        const payload = {
+          id: bookId,
+          action: action, // 'checkout' or 'return'
+          byName: byName || '',
+          byEmail: byEmail || '',
+          date: date || ''
+        };
+        
+        const response = await fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors', // Avoids CORS preflight; response cannot be read
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        // Note: With no-cors mode, we can't read the response, but the request is sent
+        console.log(`✓ Sent ${action} update to Google Sheets for book ${bookId}`);
+      } catch (error) {
+        console.warn(`Could not write ${action} to Google Sheets:`, error.message);
+        console.log('The change was saved locally and will sync on next page load');
       }
     }
 
