@@ -1017,29 +1017,46 @@
 
     /* ======= Fetching data from Google Sheets ======= */
     async function fetchBooksFromGoogleSheet(sheetUrl) {
+      if (!sheetUrl || sheetUrl.trim() === '') {
+        console.log('No Google Sheets URL configured. Using local storage only.');
+        return;
+      }
+      
       try {
         // Add cache-busting parameter to ensure fresh data on every refresh
         const separator = sheetUrl.includes('?') ? '&' : '?';
         const cacheBuster = `${separator}_=${Date.now()}`;
         const urlWithCacheBuster = sheetUrl + cacheBuster;
         
-        // Show loading indicator
-        booksContainer.innerHTML = '<div class="empty">Loading books from Google Sheets...</div>';
+        console.log('Syncing with Google Sheets...');
         
         const response = await fetch(urlWithCacheBuster);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const contentType = response.headers.get('content-type') || '';
         const data = await response.text();
-        const rows = data.split('\n').map(row => row.split(','));
-
-        // Assuming the first row contains headers
-        const headers = rows[0];
-        const booksData = rows.slice(1).map(row => {
-          const book = {};
-          row.forEach((cell, index) => {
-            book[headers[index].trim()] = cell.trim();
-          });
-          return book;
-        });
-
+        
+        let booksData = [];
+        
+        // Check if response is JSON (from Google Apps Script) or CSV
+        if (contentType.includes('application/json') || data.trim().startsWith('[')) {
+          // JSON format from Google Apps Script
+          booksData = JSON.parse(data);
+          console.log('Parsed JSON data from Google Apps Script');
+        } else {
+          // CSV format from published sheet
+          const parsed = parseCSV(data);
+          booksData = parsed.rows;
+          console.log('Parsed CSV data from published sheet');
+        }
+        
+        if (booksData.length === 0) {
+          console.warn('Google Sheets returned no data');
+          return;
+        }
+        
         // Update the books array and render the books
         books = booksData;
         // Save to localStorage for offline access
@@ -1047,18 +1064,37 @@
         // Use the main render function to display the books
         render();
         
-        console.log(`Successfully loaded ${books.length} books from Google Sheets`);
+        console.log(`✓ Successfully synced ${books.length} books from Google Sheets`);
       } catch (error) {
-        console.error('Error fetching data from Google Sheets:', error);
-        // Show error message to the user
-        booksContainer.innerHTML = '<div class="empty"><strong>Error loading books</strong><div class="small">Failed to fetch data from Google Sheets. Please check your connection and try again.</div></div>';
+        console.warn('Could not sync with Google Sheets:', error.message);
+        console.log('Using locally cached data. You can still add, edit, and manage books.');
+        // Don't show error UI - the app already rendered from localStorage
+        // Users can still use the app with cached data or add new books
       }
     }
 
-    // Google Sheets URL - published CSV format
+    // ====================================================================
+    // GOOGLE SHEETS CONFIGURATION
+    // ====================================================================
+    // Set your Google Sheets URL here. Three options:
+    //
+    // Option 1 (RECOMMENDED): Google Apps Script web app URL
+    //   - No CORS issues, works reliably
+    //   - See GOOGLE_SHEETS_SETUP.md for detailed setup instructions
+    //   - Example: 'https://script.google.com/macros/s/ABC123.../exec'
+    //
+    // Option 2: Published CSV URL
+    //   - Simpler but may have CORS issues in some browsers
+    //   - Example: 'https://docs.google.com/.../pub?gid=...&output=csv'
+    //
+    // Option 3: No sync (localStorage only)
+    //   - Set to empty string: ''
+    //   - App works entirely offline
+    //
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJb2vGii20pcqwsxbFvVPBTDUvfhLuzEOYVGCxxHtosvyDqKIkzpWZjiZ4q-XI4Wwk8IPfnHYnMBMP/pub?gid=669610684&single=true&output=csv';
+    // ====================================================================
     
-    // Fetch data from Google Sheets on every page load/refresh
+    // Fetch data from Google Sheets in the background (app already loaded from localStorage)
     fetchBooksFromGoogleSheet(GOOGLE_SHEET_URL);
     </script>
     </body>
