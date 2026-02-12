@@ -1023,42 +1023,43 @@
         const cacheBuster = `${separator}_=${Date.now()}`;
         const urlWithCacheBuster = sheetUrl + cacheBuster;
         
-        // Show loading indicator
-        booksContainer.innerHTML = '<div class="empty">Loading books from Google Sheets...</div>';
+        console.log('Syncing with Google Sheets...');
         
         const response = await fetch(urlWithCacheBuster);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.text();
-        const rows = data.split('\n').map(row => row.split(','));
-
-        // Assuming the first row contains headers
-        const headers = rows[0];
-        const booksData = rows.slice(1).map(row => {
-          const book = {};
-          row.forEach((cell, index) => {
-            book[headers[index].trim()] = cell.trim();
-          });
-          return book;
-        });
-
+        
+        // Use the proper parseCSV function to handle quoted values
+        const parsed = parseCSV(data);
+        
+        if (parsed.rows.length === 0) {
+          console.warn('Google Sheets returned no data');
+          return;
+        }
+        
         // Update the books array and render the books
-        books = booksData;
+        books = parsed.rows;
         // Save to localStorage for offline access
         saveBooks(books);
         // Use the main render function to display the books
         render();
         
-        console.log(`Successfully loaded ${books.length} books from Google Sheets`);
+        console.log(`✓ Successfully synced ${books.length} books from Google Sheets`);
       } catch (error) {
-        console.error('Error fetching data from Google Sheets:', error);
-        // Show error message to the user
-        booksContainer.innerHTML = '<div class="empty"><strong>Error loading books</strong><div class="small">Failed to fetch data from Google Sheets. Please check your connection and try again.</div></div>';
+        console.warn('Could not sync with Google Sheets:', error.message);
+        console.log('Using locally cached data. You can still add, edit, and manage books.');
+        // Don't show error UI - the app already rendered from localStorage
+        // Users can still use the app with cached data or add new books
       }
     }
 
     // Google Sheets URL - published CSV format
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJb2vGii20pcqwsxbFvVPBTDUvfhLuzEOYVGCxxHtosvyDqKIkzpWZjiZ4q-XI4Wwk8IPfnHYnMBMP/pub?gid=669610684&single=true&output=csv';
     
-    // Fetch data from Google Sheets on every page load/refresh
+    // Fetch data from Google Sheets in the background (app already loaded from localStorage)
     fetchBooksFromGoogleSheet(GOOGLE_SHEET_URL);
     </script>
     </body>
