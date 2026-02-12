@@ -948,9 +948,9 @@
       return map;
     }
 
-    function normalizeBookData(rows, headers){
+    function normalizeBookData(rows, hdrs){
       // Apply header mapping to normalize field names
-      const headerMap = autoMapHeaders(headers);
+      const headerMap = autoMapHeaders(hdrs);
       return rows.map(row => {
         const normalized = {};
         for (const [originalHeader, value] of Object.entries(row)) {
