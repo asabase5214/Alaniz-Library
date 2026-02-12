@@ -1026,11 +1026,16 @@
         if (contentType.includes('application/json') || data.trim().startsWith('[')) {
           // JSON format from Google Apps Script
           booksData = JSON.parse(data);
+          // Ensure JSON books have IDs
+          booksData = booksData.map(b => {
+            if (!b.id) b.id = uid();
+            return b;
+          });
           console.log('Parsed JSON data from Google Apps Script');
         } else {
           // CSV format from published sheet
           const parsed = parseCSV(data);
-          // Normalize headers to canonical field names (title, authors, etc.)
+          // Normalize headers to canonical field names and ensure IDs
           booksData = normalizeBookData(parsed.rows, parsed.hdrs);
           console.log('Parsed CSV data from published sheet');
         }
@@ -1039,14 +1044,6 @@
           console.warn('Google Sheets returned no data');
           return;
         }
-        
-        // Ensure all books have IDs (preserve existing or generate new)
-        booksData = booksData.map(b => {
-          if (!b.id) {
-            b.id = uid();
-          }
-          return b;
-        });
         
         // Update the books array and render the books
         books = booksData;
