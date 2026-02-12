@@ -1019,7 +1019,8 @@
     async function fetchBooksFromGoogleSheet(sheetUrl) {
       try {
         // Add cache-busting parameter to ensure fresh data on every refresh
-        const cacheBuster = `&_=${Date.now()}`;
+        const separator = sheetUrl.includes('?') ? '&' : '?';
+        const cacheBuster = `${separator}_=${Date.now()}`;
         const urlWithCacheBuster = sheetUrl + cacheBuster;
         
         // Show loading indicator
