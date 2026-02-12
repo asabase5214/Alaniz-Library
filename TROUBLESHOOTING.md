@@ -8,44 +8,30 @@ This guide helps you fix common issues with the Alaniz Library app.
 
 ### Symptoms
 - You deployed the Google Apps Script
+- You updated `GOOGLE_SHEET_URL` in `index.html` with your Apps Script URL
 - All books in your library now show "Untitled" instead of their actual titles
 - Book data seems to be missing or not loading correctly
 
 ### Root Cause
-You deployed the Apps Script but didn't update the `GOOGLE_SHEET_URL` in `index.html`. The app is still using the old CSV URL instead of your new Apps Script URL.
+**This was a bug in the app (now fixed in this version).** The app was not normalizing field names from the JSON data returned by Google Apps Script. If your Google Sheet has headers like "Title" (capital T) or "Authors", Apps Script returns those exact names, but the app expected lowercase "title" and "authors".
 
 ### Solution
 
-**Step 1: Find Your Apps Script URL**
+**If you just pulled the latest code:** The bug is fixed! Just refresh your browser.
 
-1. Open your Google Sheet
-2. Go to **Extensions** → **Apps Script**
-3. Click **Deploy** → **Manage deployments**
-4. Copy the **Web app URL** (it should look like: `https://script.google.com/macros/s/AKfycby.../exec`)
+**Step 1: Make sure you have the latest code**
 
-**Step 2: Update index.html**
+1. Pull the latest version of `index.html` from this repository
+2. The fix was added in commit d5cdc4a
 
-1. Open `index.html` in a text editor
-2. Find this line (near the end of the file, around line 1148):
-   ```javascript
-   const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-...';
-   ```
-
-3. Replace the entire URL with your Apps Script URL:
-   ```javascript
-   const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
-   ```
-
-4. Save the file
-
-**Step 3: Clear Cache and Refresh**
+**Step 2: Clear Cache and Refresh**
 
 1. Open your browser's Developer Console (F12 or Right-click → Inspect)
 2. Clear your browser cache or do a hard refresh:
    - Windows/Linux: `Ctrl + Shift + R` or `Ctrl + F5`
    - Mac: `Cmd + Shift + R`
 
-**Step 4: Verify It's Working**
+**Step 3: Verify It's Working**
 
 Open the browser console and look for these messages:
 - ✅ GOOD: `✓ Parsed JSON data from Google Apps Script`
@@ -67,9 +53,30 @@ The app is using a CSV URL instead of a Google Apps Script URL. CSV URLs are rea
 
 ### Solution
 
-**This is the SAME fix as the "Untitled" problem above!**
+**You need to use a Google Apps Script URL, not a CSV URL.**
 
-Follow the steps in the previous section to replace your CSV URL with your Apps Script URL.
+**Step 1: Find Your Apps Script URL**
+
+1. Open your Google Sheet
+2. Go to **Extensions** → **Apps Script**
+3. Click **Deploy** → **Manage deployments**
+4. Copy the **Web app URL** (it should look like: `https://script.google.com/macros/s/AKfycby.../exec`)
+5. If you don't have a deployment yet, see `GOOGLE_SHEETS_SETUP.md` for complete setup instructions
+
+**Step 2: Update index.html**
+
+1. Open `index.html` in a text editor
+2. Find this line (near the end of the file, around line 1170):
+   ```javascript
+   const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-...';
+   ```
+
+3. Replace the entire URL with your Apps Script URL:
+   ```javascript
+   const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+   ```
+
+4. Save the file and refresh your browser
 
 ### How to Know If It's Fixed
 
