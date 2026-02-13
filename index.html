@@ -449,7 +449,11 @@
 
       list.sort((a,b)=>{
         if(sortBy==='title') return (a.title||'').localeCompare(b.title||'');
-        if(sortBy==='authors') return (a.authors||'').localeCompare(b.authors||'');
+        if (sortBy === 'authors') {
+          const lastNameA = (a.authors || '').split(' ').pop();
+          const lastNameB = (b.authors || '').split(' ').pop();
+          return lastNameA.localeCompare(lastNameB);
+        }
         if(sortBy==='published') return (new Date(b.published||0)) - (new Date(a.published||0));
         return (b.added||0) - (a.added||0);
       });
