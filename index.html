@@ -315,7 +315,7 @@
 
         <div class="controls">
           <div class="searchbar" title="Search">
-            <input id="searchInput" type="search" placeholder="Search title, authors, ISBN, language, location" aria-label="Search books">
+            <input id="searchInput" type="search" placeholder="Search title, authors, ISBN, language, location" aria-label="Search books" title="Search title, authors, ISBN, language, location">
             <select id="sortSelect" title="Sort">
               <option value="title">Sort: Title</option>
               <option value="authors">Sort: Authors</option>
@@ -720,10 +720,10 @@
               const subject = `Request for book: ${b.title}`;
               const body = `Hello ${b.checkedOut.byName || ''},
 
-    My name is ${requesterName}${requesterEmail ? ` (${requesterEmail})` : ''}. I would like to request the book "${b.title}" (ISBN: ${b.isbn || '—'}). Please let me know when you can return it or if we can arrange a handover.
+    This is a book request from ${requesterName}${requesterEmail ? ` (${requesterEmail})` : ''} requesting the book "${b.title}" (ISBN: ${b.isbn || '—'}). Please respond to this email if you are able to return it or coordinate a pickup time.
 
     Thanks,
-    ${requesterName}`;
+    The Alaniz Library`;
               // open mailto link
               const mailto = `mailto:${encodeURIComponent(b.checkedOut.byEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
               window.open(mailto, '_blank');
@@ -1391,7 +1391,7 @@
         
         const response = await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
-          mode: 'no-cors', // Avoids CORS preflight; response cannot be read
+          //mode: 'no-cors', // Avoids CORS preflight; response cannot be read
           headers: {
             'Content-Type': 'application/json'
           },
@@ -1424,7 +1424,7 @@
     //   - Set to empty string: ''
     //   - App works entirely offline
     //
-    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxJ2MgtgH1pG9vo7qdgv1a8J2vxkB2sMc-UO36jtM4HxT01-tpramPvBtjKPfn04oIX/exec';
+    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxC5KJ1d4LIdcY_UkFxFC_hAC0GCJdBNPS8tkIvDnrn5Iail9QhEW8Qv1b2JnZRYHOV/exec';
     // ====================================================================
     
     // Fetch data from Google Sheets in the background (app already loaded from localStorage)
