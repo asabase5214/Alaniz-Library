@@ -100,6 +100,8 @@
         padding:6px 8px;
         outline:none;
         min-width:160px;
+        max-width:100%;
+        box-sizing:border-box;
         font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       }
 
@@ -306,128 +308,80 @@
 
       /* Additional responsive styles */
       @media (max-width: 768px) {
-      body {
-        font-size: 14px;
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .controls {
+          flex-direction: column;
+          align-items: stretch;
+          width: 100%;
+        }
+
+        .searchbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .filters {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .filters input, .filters button {
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        #sortSelect {
+          width: 100%;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .modal {
+          width: 95%;
+          padding: 14px;
+        }
+
+        .form-row {
+          flex-direction: column;
+        }
+
+        .footer {
+          flex-direction: column;
+          gap: 8px;
+          align-items: stretch;
+        }
+
+        .footer > div:last-child {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .footer button {
+          width: 100%;
+        }
       }
 
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      @media (max-width: 480px) {
+        .app {
+          margin: 8px;
+          padding: 12px;
+        }
 
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
+        h1 {
+          font-size: 18px;
+        }
 
-      .searchbar {
-        flex-direction: column;
-        align-items: stretch;
+        .panel {
+          padding: 10px;
+        }
       }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .panel {
-        margin-bottom: 16px;
-      }
-
-      .modal {
-        width: 90%;
-        padding: 16px;
-      }
-
-      .form-row {
-        flex-direction: column;
-      }
-
-      button, .btn {
-        width: 100%;
-        text-align: center;
-      }
-
-      input[type="search"], input[type="text"], input[type="number"], input[type="date"], select {
-        width: 100%;
-      }
-
-      .footer {
-        flex-direction: column;
-        align-items: stretch;
-      }
-    }
-
-    /* Additional responsive styles for smaller screens */
-    @media (max-width: 480px) {
-      body {
-        font-size: 12px;
-        padding: 0;
-      }
-
-      .app {
-        margin: 10px;
-        padding: 10px;
-      }
-
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-
-      .searchbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .panel {
-        padding: 10px;
-        margin-bottom: 10px;
-      }
-
-      .modal {
-        width: 100%;
-        padding: 10px;
-      }
-
-      .form-row {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      button, .btn {
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-      }
-
-      input[type="search"], input[type="text"], input[type="number"], input[type="date"], select {
-        width: 100%;
-        padding: 8px;
-      }
-
-      .footer {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-
-      .small {
-        font-size: 10px;
-      }
-    }
   </style>
   </head>
     <body>
@@ -435,7 +389,7 @@
       <header>
         <div>
           <h1>Alaniz Library</h1>
-          <div class="small">Fields: ISBN, Title, Quantity, Description, Authors, Publisher, Published, Pages, Language, Location</div>
+          <div class="small" style="display:none">Fields: ISBN, Title, Quantity, Description, Authors, Publisher, Published, Pages, Language, Location</div>
         </div>
 
         <div class="controls">
@@ -612,8 +566,9 @@
                 </div>
               </div>
             </div>
-            <div style="min-width:220px; text-align:right;">
+            <div style="min-width:0; max-width:120px; text-align:right; word-break:break-all;">
               <div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>
+            </div>
             </div>
           </div>
         `;
@@ -792,13 +747,13 @@
       const html = `
         <h3>Book details</h3>
         <div style="margin-top:8px;">
-          <div style="display:flex; gap:12px;">
-            <div style="flex:2">
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <div style="flex:2; min-width:200px;">
               <div style="font-weight:700; font-size:18px;">${escapeHtml(b.title||'Untitled')}</div>
               <div class="small">${escapeHtml(b.authors||'—')}</div>
               <div style="margin-top:8px">${escapeHtml(b.description||'')}</div>
             </div>
-            <div style="flex:1; min-width:220px;">
+            <div style="flex:1; min-width:160px;">
               <div class="small">ISBN: <strong>${escapeHtml(b.isbn||'—')}</strong></div>
               <div class="small">Publisher: ${escapeHtml(b.publisher||'—')}</div>
               <div class="small">Published: ${escapeHtml(b.published||'—')}</div>
