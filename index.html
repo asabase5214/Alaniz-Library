@@ -617,9 +617,9 @@
         <div style="margin-top:8px">${langs.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join(' ') || '<span class="small">No languages set</span>'}</div>
         <hr style="border:none; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0;">
         <div class="small" style="margin-bottom:6px"><strong>Fun facts</strong></div>
-        ${longest ? `<div class="small">Longest book: <strong>${escapeHtml(longest.title)}</strong> (${longest.pages}p)</div>` : ''}
-        ${shortest && shortest.id !== longest?.id ? `<div class="small">Shortest book: <strong>${escapeHtml(shortest.title)}</strong> (${shortest.pages}p)</div>` : ''}
-        ${oldest ? `<div class="small">Oldest book: <strong>${escapeHtml(oldest.title)}</strong> (${oldest.published?.slice(0,4)})</div>` : ''}
+        ${longest ? `<div class="small">Longest book: <strong>${escapeHtml(longest.title)}</strong> (${longest.pages}p)</div><br>` : ''}
+        ${shortest && shortest.id !== longest?.id ? `<div class="small">Shortest book: <strong>${escapeHtml(shortest.title)}</strong> (${shortest.pages}p)</div><br>` : ''}
+        ${oldest ? `<div class="small">Oldest book: <strong>${escapeHtml(oldest.title)}</strong> (${oldest.published?.slice(0,4)})</div><br>` : ''}
         ${newest && newest.id !== oldest?.id ? `<div class="small">Newest book: <strong>${escapeHtml(newest.title)}</strong> (${newest.published?.slice(0,4)})</div>` : ''}
       `;
     }
