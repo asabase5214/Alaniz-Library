@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="Untitled design (20).png">
     <title>
       Alaniz Library
     </title>
@@ -405,7 +405,13 @@
 
           <div class="filters">
             <input id="langFilter" type="text" placeholder="Filter by language" title="Filter by language">
-            <input id="locFilter" type="text" placeholder="Filter by location" title="Filter by location">
+            <select id="locFilter" title="Filter by location">
+              <option value="">All locations</option>
+              <option value="Upstairs">Upstairs</option>
+              <option value="Living Room">Living Room</option>
+              <option value="Kitchen">Kitchen</option>
+              <option value="Parent's Room">Parent's Room</option>
+            </select>
             <button class="btn ghost" id="exportBtn">Export</button>
             <button class="btn secondary" id="signinBtn">Sign in</button>
           </div>
@@ -690,7 +696,13 @@
 
           <div>
             <label>Location</label>
-            <input id="m_location" type="text" value="${escapeHtml(prefill.location||'')}" />
+            <select id="m_location">
+              <option value="">— Select location —</option>
+              <option value="Upstairs" ${prefill.location==='Upstairs' ? 'selected' : ''}>Upstairs</option>
+              <option value="Living Room" ${prefill.location==='Living Room' ? 'selected' : ''}>Living Room</option>
+              <option value="Kitchen" ${prefill.location==='Kitchen' ? 'selected' : ''}>Kitchen</option>
+              <option value="Parent\'s Room" ${prefill.location==='Parent\'s Room' ? 'selected' : ''}>Parent\'s Room</option>
+            </select>
           </div>
 
           <div style="margin-top:8px;">
