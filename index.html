@@ -49,7 +49,7 @@
       }
 
       html {
-        /*background: linear-gradient(180deg,#041022 0%, #071226 100%);*/
+        background: linear-gradient(180deg,#041022 0%, #071226 100%);
         min-height: 100%;
       }
 
@@ -57,13 +57,13 @@
         background: transparent;
       }
 
-      /*:root.light html {
+      :root.light html {
         background: linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%) !important;
-      }*/
+      }
 
       :root.light .app {
-        /*background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent);*/
-        box-shadow: 0 6px 30px rgba(0,0,0,0.1);
+        background: transparent;
+        box-shadow: none;
       }
 
       :root.light .panel {
@@ -114,6 +114,10 @@
 
       :root.light hr {
         border-top-color: rgba(0,0,0,0.08) !important;
+      }
+
+      :root.light {
+        --border: rgba(0,0,0,0.08);
       }
 
       .app {
@@ -708,7 +712,7 @@
 
     </div>
         `;
-      }).join('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.03)">');
+      }).join('<hr style="border:none;border-top:1px solid var(--border)">');
 
       booksContainer.innerHTML = rows;
 
