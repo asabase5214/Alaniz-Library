@@ -560,25 +560,38 @@
         const checkedBadge = checked ? `<span class="pill">Checked out</span>` : '';
         const containerClass = checked ? 'checked' : '';
         return `
-          <div class="${containerClass}" style="display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; cursor:pointer;" data-id="${b.id}">
-            <div style="flex:1;">
-              <div><img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" style="max-width:350px"></div>
-              <div style="display:flex; gap:12px; align-items:center;">
-                <div style="min-width:6px; height:36px; border-radius:6px; background:linear-gradient(180deg,var(--accent),var(--accent-2));"></div>
-                <div>
-                  <div style="font-weight:700">${escapeHtml(b.title||'Untitled')} ${checkedBadge}</div>
-                  <div class="small">${authors || '—'}</div>
-                  <div style="margin-top:6px">${tags} ${pub} ${qty}</div>
-                  <div class="small" style="margin-top:6px">${escapeHtml((b.description||'').slice(0,180))}${(b.description||'').length>180 ? '…' : ''}</div>
-                  ${checked ? `<div class="small" style="margin-top:6px">Checked out by <span class="user-badge">${checkedBy}</span></div>` : ''}
-                </div>
-              </div>
+              <<div class="${containerClass}" 
+        style="display:flex; gap:16px; align-items:flex-start; padding:10px 0; cursor:pointer;" 
+        data-id="${b.id}">
+
+      <!-- COVER COLUMN -->
+      <div style="flex:0 0 120px;">
+        <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" 
+            style="width:100%; border-radius:6px;">
+      </div>
+
+      <!-- MAIN TEXT COLUMN -->
+      <div style="flex:1;">
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <div style="min-width:6px; height:36px; border-radius:6px; background:linear-gradient(180deg,var(--accent),var(--accent-2));"></div>
+          <div>
+            <div style="font-weight:700">${escapeHtml(b.title||'Untitled')} ${checkedBadge}</div>
+            <div class="small">${authors || '—'}</div>
+            <div style="margin-top:6px">${tags} ${pub} ${qty}</div>
+            <div class="small" style="margin-top:6px">
+              ${escapeHtml((b.description||'').slice(0,180))}${(b.description||'').length>180 ? '…' : ''}
             </div>
-            <div style="text-align:right; white-space:nowrap;">
-              <div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>
-            </div>
-            </div>
+            ${checked ? `<div class="small" style="margin-top:6px">Checked out by <span class="user-badge">${checkedBy}</span></div>` : ''}
           </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="text-align:right; white-space:nowrap;">
+        <div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>
+      </div>
+
+    </div>
         `;
       }).join('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.03)">');
 
