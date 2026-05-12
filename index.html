@@ -545,8 +545,8 @@
       });
 
       if(list.length === 0){
-        booksContainer.innerHTML = `<div class="empty"><strong>No books found</strong><div class="small">Check spelling or try again with different filters.</div></div>`;
-        renderStats();
+        booksContainer.innerHTML = `<div class="empty"><strong>No books found</strong><div class="small">Add books or import your Orca Scan export.</div></div>`;
+        renderStats(list);
         return;
       }
 
@@ -594,20 +594,20 @@
         });
       });
 
-      renderStats();
+      renderStats(list);
     }
 
-    function renderStats(){
+    function renderStats(list = books){
       const area = document.getElementById('statsArea');
-      const total = books.reduce((s,b)=> s + (Number(b.quantity)||0), 0);
-      const count = books.length;
-      const langs = [...new Set(books.map(b => (b.language||'').trim()).filter(Boolean))].slice(0,20);
-      const checkedCount = books.filter(b => b.checkedOut).length;
-      const booksWithPages = books.filter(b => Number(b.pages) > 0);
+      const total = list.reduce((s,b)=> s + (Number(b.quantity)||0), 0);
+      const count = list.length;
+      const langs = [...new Set(list.map(b => (b.language||'').trim()).filter(Boolean))].slice(0,20);
+      const checkedCount = list.filter(b => b.checkedOut).length;
+      const booksWithPages = list.filter(b => Number(b.pages) > 0);
+      const booksWithDate = list.filter(b => b.published && !isNaN(new Date(b.published)));
       const longest = booksWithPages.sort((a,b) => Number(b.pages) - Number(a.pages))[0];
       const shortest = booksWithPages.sort((a,b) => Number(a.pages) - Number(b.pages))[0];
 
-      const booksWithDate = books.filter(b => b.published && !isNaN(new Date(b.published)));
       const oldest = booksWithDate.sort((a,b) => new Date(a.published) - new Date(b.published))[0];
       const newest = booksWithDate.sort((a,b) => new Date(b.published) - new Date(a.published))[0];
 
