@@ -785,7 +785,7 @@
               <div style="font-weight:700; font-size:18px;">${escapeHtml(b.title||'Untitled')}</div>
               <div class="small">${escapeHtml(b.authors||'—')}</div>
               <div style="flex:0 0 120px;">
-                <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="width:100%; border-radius:6px;">
+                <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="max-width:350px; border-radius:6px;">
               </div>
               <div style="margin-top:8px">${escapeHtml(b.description||'')}</div>
             </div>
