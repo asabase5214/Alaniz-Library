@@ -19,16 +19,38 @@
         --bg:#071226; --card:#0b1220; --muted:#9aa4b2; --accent:#60a5fa; --accent-2:#7c3aed;
         --glass: rgba(255,255,255,0.02);
         --checked-bg: rgba(124,58,237,0.08);
+        --text: #e6eef6;
+        --border: rgba(255,255,255,0.03);
+        --panel-bg: rgba(255,255,255,0.02);
+        --modal-bg: #071226;
+        --input-bg: transparent;
         font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
         color-scheme: dark;
+      }
+
+      :root.light {
+        --bg:#f0f4f8; --card:#ffffff; --muted:#4a5568; --accent:#2563eb; --accent-2:#7c3aed;
+        --glass: rgba(0,0,0,0.03);
+        --checked-bg: rgba(124,58,237,0.06);
+        --text: #1a202c;
+        --border: rgba(0,0,0,0.08);
+        --panel-bg: rgba(255,255,255,0.8);
+        --modal-bg: #ffffff;
+        --input-bg: transparent;
+        color-scheme: light;
       }
 
       html,body {
         height:100%;
         margin:0;
         background:linear-gradient(180deg,#041022 0%, #071226 100%);
-        color:#e6eef6;
+        color: var(--text);
         font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        transition: background 0.3s, color 0.3s;
+      }
+
+      :root.light body {
+        background: linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%);
       }
 
       .app {
@@ -118,7 +140,7 @@
       }
 
       .panel {
-        background:rgba(255,255,255,0.02);
+        background: var(--panel-bg);
         padding:14px;
         border-radius:10px;
         min-height:120px;
@@ -133,8 +155,8 @@
       th,td {
         padding:8px 10px;
         text-align:left;
-        border-bottom:1px solid rgba(255,255,255,0.03);
-        color:#dbeafe;
+        border-bottom:1px solid var(--border);
+        color: var(--text);
       }
 
       th {
@@ -181,7 +203,7 @@
       .modal {
         width:760px;
         max-width:95%;
-        background:#071226;
+        background: var(--modal-bg);
         padding:18px;
         border-radius:12px;
         box-shadow:0 10px 40px rgba(2,6,23,0.7);
@@ -214,9 +236,9 @@
         width:100%;
         padding:8px;
         border-radius:8px;
-        border:1px solid rgba(255,255,255,0.03);
-        background:transparent;
-        color:#e6eef6;
+        border:1px solid var(--border);
+        background: var(--input-bg);
+        color: var(--text);
       }
 
       .meta {
@@ -283,8 +305,8 @@
       }
 
       #sortSelect option {
-        background:#071226;
-        color:#e6eef6;
+        background: var(--modal-bg);
+        color: var(--text);
       }
 
       @media (max-width:900px){
@@ -413,6 +435,7 @@
               <option value="Parents Room">Parent's Room</option>
               <option value="Jaelles Room">Jaelle's Room</option>
             </select>
+            <button class="btn ghost" id="themeBtn" title="Toggle light/dark mode">🌙</button>
             <button class="btn ghost" id="exportBtn">Export</button>
             <button class="btn secondary" id="signinBtn">Sign in</button>
           </div>
@@ -475,6 +498,24 @@
     /* ======= App state ======= */
     let books = loadBooks();
     let currentUser = loadUser();
+
+    /* ======= Theme ======= */
+    let currentTheme = localStorage.getItem('libraryTheme') || 'dark';
+    function applyTheme(theme){
+      currentTheme = theme;
+      localStorage.setItem('libraryTheme', theme);
+      if(theme === 'light'){
+        document.documentElement.classList.add('light');
+        document.getElementById('themeBtn').textContent = '☀️';
+      } else {
+        document.documentElement.classList.remove('light');
+        document.getElementById('themeBtn').textContent = '🌙';
+      }
+    }
+    applyTheme(currentTheme);
+    document.getElementById('themeBtn').addEventListener('click', ()=>{
+      applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    });
 
     /* ======= Modal helpers ======= */
     const modalRoot = document.getElementById('modalRoot');
