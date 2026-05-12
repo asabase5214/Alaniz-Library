@@ -778,33 +778,36 @@
       const checkedBy = checked ? escapeHtml(b.checkedOut.byName || '') : '';
       const checkedEmail = checked ? escapeHtml(b.checkedOut.byEmail || '') : '';
       const html = `
-        <h3>Book details</h3>
-        <div style="flex:0 0 120px;">
-          <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="max-width:350px; border-radius:6px;">
+        <h3>Book Details</h3>
+
+          <div style="display:flex; gap:16px; margin-top:8px;">
+
+            <div style="flex:0 0 150px;">
+              <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="width:100%; max-width:150px; border-radius:6px;">
+            </div>
+
+          <div style="flex:1;">
+            <div style="font-weight:700; font-size:18px;">${escapeHtml(b.title||'Untitled')}</div>
+          <div class="small">${escapeHtml(b.authors||'—')}</div>
+          <div style="margin-top:8px;">${escapeHtml(b.description||'')}</div>
+        <div style="margin-top:12px;">
+          <div class="small">ISBN: <strong>${escapeHtml(b.isbn||'—')}</strong></div>
+          <div class="small">Publisher: ${escapeHtml(b.publisher||'—')}</div>
+          <div class="small">Published: ${escapeHtml(b.published||'—')}</div>
+          <div class="small">Pages: ${escapeHtml(b.pages||'—')}</div>
+          <div class="small">Language: ${escapeHtml(b.language||'—')}</div>
+          <div class="small">Location: ${escapeHtml(b.location||'—')}</div>
+          <div class="small">Quantity: ${escapeHtml(String(b.quantity||1))}</div>
+          <div style="margin-top:8px;">${checked ? `<div class="small">Checked out by <span class="user-badge">${checkedBy}</span></div>` : `<div class="small">Available</div>`}</div>
         </div>
-
-        <div style="margin-top:8px; flex:1;">
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <div style="flex:2; min-width:200px;">
-              <div style="font-weight:700; font-size:18px;">${escapeHtml(b.title||'Untitled')}</div>
-              <div class="small">${escapeHtml(b.authors||'—')}</div>
-              <div style="margin-top:8px">${escapeHtml(b.description||'')}</div>
-            </div>
-            <div style="flex:1; min-width:160px;">
-              <div class="small">ISBN: <strong>${escapeHtml(b.isbn||'—')}</strong></div>
-              <div class="small">Publisher: ${escapeHtml(b.publisher||'—')}</div>
-              <div class="small">Published: ${escapeHtml(b.published||'—')}</div>
-              <div class="small">Pages: ${escapeHtml(b.pages||'—')}</div>
-              <div class="small">Language: ${escapeHtml(b.language||'—')}</div>
-              <div class="small">Location: ${escapeHtml(b.location||'—')}</div>
-              <div class="small">Quantity: ${escapeHtml(String(b.quantity||1))}</div>
-              <div style="margin-top:8px">${checked ? `<div class="small">Checked out by <span class="user-badge">${checkedBy}</span></div>` : `<div class="small">Available</div>`}</div>
-            </div>
-          </div>
-
-          <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
-            ${checked ? (currentUser && currentUser.name === b.checkedOut.byName ? `<button class="btn" id="returnBtn">Return book</button>` : `<button class="btn secondary" id="requestBtn">Request book</button>`) : `<button class="btn" id="checkoutBtn">Check out</button>`}
+          <div style="margin-top:16px; display:flex; gap:8px; justify-content:flex-end;">
+            ${checked 
+              ? (currentUser && currentUser.name === b.checkedOut.byName 
+                  ? `<button class="btn" id="returnBtn">Return book</button>` 
+                  : `<button class="btn secondary" id="requestBtn">Request book</button>`)
+              : `<button class="btn" id="checkoutBtn">Check out</button>`}
             <button class="btn secondary" id="closeDetail">Close</button>
+          </div>
           </div>
         </div>
       `;
