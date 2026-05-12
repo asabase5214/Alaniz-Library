@@ -779,14 +779,14 @@
       const checkedEmail = checked ? escapeHtml(b.checkedOut.byEmail || '') : '';
       const html = `
         <h3>Book details</h3>
-        <div style="margin-top:8px;">
+        <div style="flex:0 0 120px;">
+          <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="max-width:350px; border-radius:6px;">
+        </div>
+        <div style="margin-top:8px; flex:1">
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <div style="flex:2; min-width:200px;">
               <div style="font-weight:700; font-size:18px;">${escapeHtml(b.title||'Untitled')}</div>
               <div class="small">${escapeHtml(b.authors||'—')}</div>
-              <div style="flex:0 0 120px;">
-                <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="max-width:350px; border-radius:6px;">
-              </div>
               <div style="margin-top:8px">${escapeHtml(b.description||'')}</div>
             </div>
             <div style="flex:1; min-width:160px;">
