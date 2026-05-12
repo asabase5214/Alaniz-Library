@@ -120,6 +120,24 @@
         --border: rgba(0,0,0,0.08);
       }
 
+      :root.light .app {
+        background: transparent;
+        box-shadow: none;
+      }
+
+      :root.light .panel {
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
+
+      :root.light [data-id] {
+        background: transparent !important;
+      }
+
+      :root.light .checked {
+        background: rgba(124,58,237,0.06) !important;
+      }
+
       .app {
         max-width:1100px;
         margin:28px auto;
