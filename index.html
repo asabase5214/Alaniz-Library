@@ -49,8 +49,63 @@
         transition: background 0.3s, color 0.3s;
       }
 
-      :root.light body {
-        background: linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%);
+      :root.light body, :root.light html {
+        background: linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%) !important;
+      }
+
+      :root.light .app {
+        background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+        box-shadow: 0 6px 30px rgba(0,0,0,0.1);
+      }
+
+      :root.light .panel {
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
+
+      :root.light .modal-backdrop {
+        background: rgba(100,120,150,0.4);
+      }
+
+      :root.light .checked {
+        background: rgba(124,58,237,0.06);
+        border-left: 4px solid var(--accent-2);
+      }
+
+      :root.light .tag {
+        background: rgba(0,0,0,0.06);
+        color: var(--muted);
+      }
+
+      :root.light .pill {
+        background: rgba(0,0,0,0.05);
+      }
+
+      :root.light .searchbar {
+        background: rgba(0,0,0,0.04);
+      }
+
+      :root.light input[type="search"],
+      :root.light input[type="text"],
+      :root.light input[type="number"],
+      :root.light input[type="date"],
+      :root.light select,
+      :root.light textarea {
+        color: #1a202c;
+      }
+
+      :root.light .btn.ghost {
+        color: var(--muted);
+        border-color: rgba(0,0,0,0.1);
+      }
+
+      :root.light .btn.secondary {
+        color: var(--accent);
+        border-color: rgba(37,99,235,0.3);
+      }
+
+      :root.light hr {
+        border-top-color: rgba(0,0,0,0.08) !important;
       }
 
       .app {
