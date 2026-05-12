@@ -198,6 +198,8 @@
         background:var(--glass);
         padding:8px;
         border-radius:10px;
+        width:100%;
+        box-sizing:border-box;
       }
 
       input[type="search"], input[type="text"], input[type="number"], input[type="date"], select {
@@ -206,7 +208,8 @@
         color:var(--muted);
         padding:6px 8px;
         outline:none;
-        min-width:160px;
+        min-width:0;
+        width:100%;
         max-width:100%;
         box-sizing:border-box;
         font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -489,6 +492,47 @@
           padding: 10px;
         }
       }
+
+      @media (max-width: 500px) {
+        .controls {
+          width: 100%;
+        }
+
+        .searchbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        #sortSelect {
+          width: 100%;
+        }
+
+        .filters {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .filters select,
+        .filters input,
+        .filters button {
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        header {
+          gap: 8px;
+        }
+
+        /* Make book rows stack vertically on very small screens */
+        [data-id] {
+          flex-wrap: wrap;
+        }
+
+        [data-id] > div:last-child {
+          width: 100%;
+          text-align: left !important;
+        }
+      }
   </style>
   </head>
     <body>
@@ -711,7 +755,7 @@
         const containerClass = checked ? 'checked' : '';
         return `
           <div class="${containerClass}" style="display:flex; gap:16px; align-items:flex-start; padding:10px 0; cursor:pointer;" data-id="${b.id}">
-            <div style="flex:0 0 120px;">
+            <div style="flex:0 0 clamp(60px, 18vw, 120px);">
               <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="width:100%; border-radius:6px;">
             </div>
 
