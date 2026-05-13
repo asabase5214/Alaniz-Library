@@ -14,574 +14,576 @@
       Alaniz Library
     </title>
 
-  <style>
-      :root {
-        --bg:#071226; --card:#0b1220; --muted:#9aa4b2; --accent:#60a5fa; --accent-2:#7c3aed;
-        --glass: rgba(255,255,255,0.02);
-        --checked-bg: rgba(124,58,237,0.08);
-        --text: #e6eef6;
-        --border: rgba(255,255,255,0.03);
-        --panel-bg: rgba(255,255,255,0.02);
-        --modal-bg: #071226;
-        --input-bg: transparent;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-        color-scheme: dark;
-      }
-
-      :root.light {
-        --bg:#f0f4f8; --card:#ffffff; --muted:#4a5568; --accent:#2563eb; --accent-2:#7c3aed;
-        --glass: rgba(0,0,0,0.03);
-        --checked-bg: rgba(124,58,237,0.06);
-        --text: #1a202c;
-        --border: rgba(0,0,0,0.08);
-        --panel-bg: rgba(255,255,255,0.8);
-        --modal-bg: #ffffff;
-        --input-bg: transparent;
-        color-scheme: light;
-      }
-
-      html, body {
-        height:100%;
-        margin:0;
-        color: var(--text);
-        font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-        transition: background 0.3s, color 0.3s;
-      }
-
-      html {
-        background: linear-gradient(180deg,#041022 0%, #071226 100%);
-        min-height: 100%;
-      }
-
-      body {
-        background: transparent;
-      }
-
-      :root.light html {
-        background: linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%) !important;
-      }
-
-      :root.light .app {
-        background: transparent;
-        box-shadow: none;
-      }
-
-      :root.light .panel {
-        background: #ffffff;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      }
-
-      :root.light .modal-backdrop {
-        background: rgba(100,120,150,0.4);
-      }
-
-      :root.light .checked {
-        background: rgba(124,58,237,0.06);
-        border-left: 4px solid var(--accent-2);
-      }
-
-      :root.light .tag {
-        background: rgba(0,0,0,0.06);
-        color: var(--muted);
-      }
-
-      :root.light .pill {
-        background: rgba(0,0,0,0.05);
-      }
-
-      :root.light .searchbar {
-        background: rgba(0,0,0,0.04);
-      }
-
-      :root.light input[type="search"],
-      :root.light input[type="text"],
-      :root.light input[type="number"],
-      :root.light input[type="date"],
-      :root.light select,
-      :root.light textarea {
-        color: #1a202c;
-      }
-
-      :root.light .btn.ghost {
-        color: var(--muted);
-        border-color: rgba(0,0,0,0.1);
-      }
-
-      :root.light .btn.secondary {
-        color: var(--accent);
-        border-color: rgba(37,99,235,0.3);
-      }
-
-      :root.light hr {
-        border-top-color: rgba(0,0,0,0.08) !important;
-      }
-
-      :root.light {
-        --border: rgba(0,0,0,0.08);
-      }
-
-      :root.light .app {
-        background: transparent;
-        box-shadow: none;
-      }
-
-      :root.light .panel {
-        background: #ffffff;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      }
-
-      :root.light [data-id] {
-        background: transparent !important;
-      }
-
-      :root.light .checked {
-        background: rgba(124,58,237,0.06) !important;
-      }
-
-      .app {
-        max-width:1100px;
-        margin:28px auto;
-        padding:20px;
-        background: transparent;
-        border-radius:12px;
-        box-shadow:0 6px 30px rgba(2,6,23,0.6);
-      }
-
-      header {
-        display:flex;
-        gap:16px;
-        align-items:center;
-        justify-content:space-between;
-        margin-bottom:18px;
-      
-      }
-      h1 {
-        font-size:20px;
-        margin:0;
-        letter-spacing:0.2px;
-      }
-
-      .controls{
-        display:flex;
-        gap:8px;
-        align-items:center;
-        flex-wrap:wrap;
-      }
-
-      button, .btn {
-        background:var(--accent);
-        color:#04203a;
-        border:0;
-        padding:8px 12px;
-        border-radius:8px;
-        cursor:pointer;
-        font-weight:600;
-        font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      }
-
-      .btn.secondary {
-        background:transparent;
-        color:var(--accent);
-        border:1px solid rgba(96,165,250,0.12);
-      }
-
-      .btn.ghost {
-        background:transparent;
-        color:var(--muted);
-        border:1px dashed rgba(255,255,255,0.03);
-      }
-
-      .searchbar {
-        display:flex;
-        gap:8px;
-        align-items:center;
-        background:var(--glass);
-        padding:8px;
-        border-radius:10px;
-      }
-
-      input[type="search"], input[type="text"], input[type="number"], input[type="date"], select {
-        background:transparent;
-        border:0;
-        color:var(--muted);
-        padding:6px 8px;
-        outline:none;
-        min-width:160px;
-        max-width:100%;
-        box-sizing:border-box;
-        font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      }
-
-      .filters {
-        display:flex;
-        gap:8px;
-        align-items:center;
-      }
-
-      .grid {
-        display:grid;
-        grid-template-columns: 1fr 320px;
-        gap:18px;
-      }
-
-      .panel {
-        background: var(--panel-bg);
-        padding:14px;
-        border-radius:10px;
-        min-height:120px;
-      }
-
-      table {
-        width:100%;
-        border-collapse:collapse;
-        font-size:14px;
-      }
-
-      th,td {
-        padding:8px 10px;
-        text-align:left;
-        border-bottom:1px solid var(--border);
-        color: var(--text);
-      }
-
-      th {
-        font-weight:700;
-        color:var(--muted);
-        font-size:12px;
-      }
-
-      .row-actions{ 
-        display:flex;
-        gap:6px;
-      }
-
-      .tag {
-        display:inline-block;
-        padding:4px 8px;
-        border-radius:999px;
-        background:rgba(255,255,255,0.03);
-        color:var(--muted);
-        font-size:12px;
-      }
-
-      .small {
-        font-size:13px;
-        color:var(--muted);
-      }
-
-      .empty {
-        padding:40px;
-        text-align:center;
-        color:var(--muted);
-      }
-
-      .modal-backdrop {
-        position:fixed;
-        inset:0;
-        background:rgba(2,6,23,0.6);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        z-index:60;
-      }
-
-      .modal {
-        width:760px;
-        max-width:95%;
-        background: var(--modal-bg);
-        padding:18px;
-        border-radius:12px;
-        box-shadow:0 10px 40px rgba(2,6,23,0.7);
-      }
-
-      /* Ensure modal fits viewport and can scroll */
-      .modal {
-        max-height: 90vh;
-        overflow: auto;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .form-row {
-        display:flex;
-        gap:8px;
-        margin-bottom:8px;
-      }
-
-      label {
-        font-size:13px;
-        color:var(--muted);
-        margin-bottom:6px;
-        display:block;
-      }
-
-      textarea {
-        min-height:80px;
-        resize:vertical;
-        width:100%;
-        padding:8px;
-        border-radius:8px;
-        border:1px solid var(--border);
-        background: var(--input-bg);
-        color: var(--text);
-      }
-
-      .meta {
-        font-size:12px;
-        color:var(--muted);
-        margin-top:8px;
-      }
-
-      .import-preview {
-        max-height:40vh;
-        overflow:auto;
-        border:1px solid rgba(255,255,255,0.03);
-        padding:8px;
-        border-radius:8px;
-        background:rgba(255,255,255,0.01);
-      }
-
-      .footer {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-top:12px;
-      }
-
-      .pill {
-        padding:6px 10px;
-        border-radius:999px;
-        background:rgba(255,255,255,0.02);
-        color:var(--muted);
-        font-size:13px;
-      }
-
-      /* Sticky action row so Import/Cancel are always visible */
-      .modal .import-actions {
-        position: sticky;
-        bottom: 0;
-        background: linear-gradient(180deg, rgba(7,18,38,0.0), rgba(7,18,38,0.95));
-        padding-top: 10px;
-        padding-bottom: 8px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-      }
-
-      /* checked-out visual */
-      .checked {
-        background: var(--checked-bg);
-        border-left: 4px solid var(--accent-2);
-      }
-
-      .user-badge {
-        font-weight:700;
-        color:var(--accent-2);
-      }
-
-      #sortSelect {
-        background:transparent;
-        border:0;
-        color:var(--muted);
-        padding:6px 8px;
-        outline:none;
-        cursor:pointer;
-        border-radius: 5px;
-      }
-
-      #sortSelect option {
-        background: var(--modal-bg);
-        color: var(--text);
-      }
-
-      @media (max-width:900px){
-        .grid {
-          grid-template-columns:1fr;
+    <style>
+        :root {
+          --bg:#071226; --card:#0b1220; --muted:#9aa4b2; --accent:#60a5fa; --accent-2:#7c3aed;
+          --glass: rgba(255,255,255,0.02);
+          --checked-bg: rgba(124,58,237,0.08);
+          --text: #e6eef6;
+          --border: rgba(255,255,255,0.03);
+          --panel-bg: rgba(255,255,255,0.02);
+          --modal-bg: #071226;
+          --input-bg: transparent;
+          font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+          color-scheme: dark;
         }
 
-        .controls {
-          flex-direction:column;
-          align-items:stretch;
-        }
-        
-        .modal {
-          width:95%
-        }
-        
-        .form-row {
-          flex-direction:column;
-        }
-      }
-
-      /* Additional responsive styles */
-      @media (max-width: 768px) {
-        header {
-          flex-direction: column;
-          align-items: flex-start;
+        :root.light {
+          --bg:#f0f4f8; --card:#ffffff; --muted:#4a5568; --accent:#2563eb; --accent-2:#7c3aed;
+          --glass: rgba(0,0,0,0.03);
+          --checked-bg: rgba(124,58,237,0.06);
+          --text: #1a202c;
+          --border: rgba(0,0,0,0.08);
+          --panel-bg: rgba(255,255,255,0.8);
+          --modal-bg: #ffffff;
+          --input-bg: transparent;
+          color-scheme: light;
         }
 
-        .controls {
-          flex-direction: column;
-          align-items: stretch;
-          width: 100%;
+        html, body {
+          height:100%;
+          margin:0;
+          color: var(--text);
+          font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+          transition: background 0.3s, color 0.3s;
         }
 
-        .searchbar {
-          flex-direction: column;
-          align-items: stretch;
+        html {
+          background: linear-gradient(180deg,#041022 0%, #071226 100%);
+          min-height: 100%;
         }
 
-        .filters {
-          flex-direction: column;
-          align-items: stretch;
+        body {
+          background: transparent;
         }
 
-        .filters input, .filters button {
-          width: 100%;
-          box-sizing: border-box;
+        :root.light html {
+          background: linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%) !important;
         }
 
-        #sortSelect {
-          width: 100%;
+        :root.light .app {
+          background: transparent;
+          box-shadow: none;
         }
 
-        .grid {
-          grid-template-columns: 1fr;
+        :root.light .panel {
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
-        .modal {
-          width: 95%;
-          padding: 14px;
+        :root.light .modal-backdrop {
+          background: rgba(100,120,150,0.4);
         }
 
-        .form-row {
-          flex-direction: column;
+        :root.light .checked {
+          background: rgba(124,58,237,0.06);
+          border-left: 4px solid var(--accent-2);
         }
 
-        .footer {
-          flex-direction: column;
-          gap: 8px;
-          align-items: stretch;
+        :root.light .tag {
+          background: rgba(0,0,0,0.06);
+          color: var(--muted);
         }
 
-        .footer > div:last-child {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
+        :root.light .pill {
+          background: rgba(0,0,0,0.05);
         }
 
-        .footer button {
-          width: 100%;
+        :root.light .searchbar {
+          background: rgba(0,0,0,0.04);
         }
-      }
 
-      @media (max-width: 480px) {
+        :root.light input[type="search"],
+        :root.light input[type="text"],
+        :root.light input[type="number"],
+        :root.light input[type="date"],
+        :root.light select,
+        :root.light textarea {
+          color: #1a202c;
+        }
+
+        :root.light .btn.ghost {
+          color: var(--muted);
+          border-color: rgba(0,0,0,0.1);
+        }
+
+        :root.light .btn.secondary {
+          color: var(--accent);
+          border-color: rgba(37,99,235,0.3);
+        }
+
+        :root.light hr {
+          border-top-color: rgba(0,0,0,0.08) !important;
+        }
+
+        :root.light {
+          --border: rgba(0,0,0,0.08);
+        }
+
+        :root.light .app {
+          background: transparent;
+          box-shadow: none;
+        }
+
+        :root.light .panel {
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        :root.light [data-id] {
+          background: transparent !important;
+        }
+
+        :root.light .checked {
+          background: rgba(124,58,237,0.06) !important;
+        }
+
         .app {
-          margin: 8px;
-          padding: 12px;
-        }
-
-        h1 {
-          font-size: 18px;
-        }
-
-        .panel {
-          padding: 10px;
-        }
-      }
-
-      @media (max-width: 500px) {
-        .controls {
-          width: 100%;
-        }
-
-        .searchbar {
-          flex-direction: column;
-          align-items: stretch;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        #sortSelect {
-          width: 100%;
-        }
-
-        .filters {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .filters select,
-        .filters input,
-        .filters button {
-          width: 100%;
-          box-sizing: border-box;
+          max-width:1100px;
+          margin:28px auto;
+          padding:20px;
+          background: transparent;
+          border-radius:12px;
+          box-shadow:0 6px 30px rgba(2,6,23,0.6);
         }
 
         header {
-          gap: 8px;
+          display:flex;
+          gap:16px;
+          align-items:center;
+          justify-content:space-between;
+          margin-bottom:18px;
+        
+        }
+        h1 {
+          font-size:20px;
+          margin:0;
+          letter-spacing:0.2px;
+        }
+
+        .controls{
+          display:flex;
+          gap:8px;
+          align-items:center;
+          flex-wrap:wrap;
+        }
+
+        button, .btn {
+          background:var(--accent);
+          color:#04203a;
+          border:0;
+          padding:8px 12px;
+          border-radius:8px;
+          cursor:pointer;
+          font-weight:600;
+          font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        .btn.secondary {
+          background:transparent;
+          color:var(--accent);
+          border:1px solid rgba(96,165,250,0.12);
+        }
+
+        .btn.ghost {
+          background:transparent;
+          color:var(--muted);
+          border:1px dashed rgba(255,255,255,0.03);
+        }
+
+        .searchbar {
+          display:flex;
+          gap:8px;
+          align-items:center;
+          background:var(--glass);
+          padding:8px;
+          border-radius:10px;
         }
 
         input[type="search"], input[type="text"], input[type="number"], input[type="date"], select {
-          min-width: 0;
-          width: 100%;
+          background:transparent;
+          border:0;
+          color:var(--muted);
+          padding:6px 8px;
+          outline:none;
+          min-width:160px;
+          max-width:100%;
+          box-sizing:border-box;
+          font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
         }
 
-        .book-cover {
-          flex: 0 0 clamp(60px, 18vw, 120px) !important;
+        .filters {
+          display:flex;
+          gap:8px;
+          align-items:center;
         }
 
-        [data-id] {
-          flex-wrap: wrap;
+        .grid {
+          display:grid;
+          grid-template-columns: 1fr 320px;
+          gap:18px;
         }
 
-        [data-id] > div:last-child {
-          width: 100%;
-          text-align: left !important;
+        .panel {
+          background: var(--panel-bg);
+          padding:14px;
+          border-radius:10px;
+          min-height:120px;
         }
-      }
-  </style>
+
+        table {
+          width:100%;
+          border-collapse:collapse;
+          font-size:14px;
+        }
+
+        th,td {
+          padding:8px 10px;
+          text-align:left;
+          border-bottom:1px solid var(--border);
+          color: var(--text);
+        }
+
+        th {
+          font-weight:700;
+          color:var(--muted);
+          font-size:12px;
+        }
+
+        .row-actions{ 
+          display:flex;
+          gap:6px;
+        }
+
+        .tag {
+          display:inline-block;
+          padding:4px 8px;
+          border-radius:999px;
+          background:rgba(255,255,255,0.03);
+          color:var(--muted);
+          font-size:12px;
+        }
+
+        .small {
+          font-size:13px;
+          color:var(--muted);
+        }
+
+        .empty {
+          padding:40px;
+          text-align:center;
+          color:var(--muted);
+        }
+
+        .modal-backdrop {
+          position:fixed;
+          inset:0;
+          background:rgba(2,6,23,0.6);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          z-index:60;
+        }
+
+        .modal {
+          width:760px;
+          max-width:95%;
+          background: var(--modal-bg);
+          padding:18px;
+          border-radius:12px;
+          box-shadow:0 10px 40px rgba(2,6,23,0.7);
+        }
+
+        /* Ensure modal fits viewport and can scroll */
+        .modal {
+          max-height: 90vh;
+          overflow: auto;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .form-row {
+          display:flex;
+          gap:8px;
+          margin-bottom:8px;
+        }
+
+        label {
+          font-size:13px;
+          color:var(--muted);
+          margin-bottom:6px;
+          display:block;
+        }
+
+        textarea {
+          min-height:80px;
+          resize:vertical;
+          width:100%;
+          padding:8px;
+          border-radius:8px;
+          border:1px solid var(--border);
+          background: var(--input-bg);
+          color: var(--text);
+        }
+
+        .meta {
+          font-size:12px;
+          color:var(--muted);
+          margin-top:8px;
+        }
+
+        .import-preview {
+          max-height:40vh;
+          overflow:auto;
+          border:1px solid rgba(255,255,255,0.03);
+          padding:8px;
+          border-radius:8px;
+          background:rgba(255,255,255,0.01);
+        }
+
+        .footer {
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          margin-top:12px;
+        }
+
+        .pill {
+          padding:6px 10px;
+          border-radius:999px;
+          background:rgba(255,255,255,0.02);
+          color:var(--muted);
+          font-size:13px;
+        }
+
+        /* Sticky action row so Import/Cancel are always visible */
+        .modal .import-actions {
+          position: sticky;
+          bottom: 0;
+          background: linear-gradient(180deg, rgba(7,18,38,0.0), rgba(7,18,38,0.95));
+          padding-top: 10px;
+          padding-bottom: 8px;
+          display: flex;
+          justify-content: flex-end;
+          gap: 8px;
+        }
+
+        /* checked-out visual */
+        .checked {
+          background: var(--checked-bg);
+          border-left: 4px solid var(--accent-2);
+        }
+
+        .user-badge {
+          font-weight:700;
+          color:var(--accent-2);
+        }
+
+        #sortSelect {
+          background:transparent;
+          border:0;
+          color:var(--muted);
+          padding:6px 8px;
+          outline:none;
+          cursor:pointer;
+          border-radius: 5px;
+        }
+
+        #sortSelect option {
+          background: var(--modal-bg);
+          color: var(--text);
+        }
+
+        @media (max-width:900px){
+          .grid {
+            grid-template-columns:1fr;
+          }
+
+          .controls {
+            flex-direction:column;
+            align-items:stretch;
+          }
+          
+          .modal {
+            width:95%
+          }
+          
+          .form-row {
+            flex-direction:column;
+          }
+        }
+
+        /* Additional responsive styles */
+        @media (max-width: 768px) {
+          header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .controls {
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+          }
+
+          .searchbar {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .filters {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .filters input, .filters button {
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          #sortSelect {
+            width: 100%;
+          }
+
+          .grid {
+            grid-template-columns: 1fr;
+          }
+
+          .modal {
+            width: 95%;
+            padding: 14px;
+          }
+
+          .form-row {
+            flex-direction: column;
+          }
+
+          .footer {
+            flex-direction: column;
+            gap: 8px;
+            align-items: stretch;
+          }
+
+          .footer > div:last-child {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .footer button {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .app {
+            margin: 8px;
+            padding: 12px;
+          }
+
+          h1 {
+            font-size: 18px;
+          }
+
+          .panel {
+            padding: 10px;
+          }
+        }
+
+        @media (max-width: 500px) {
+          .controls {
+            width: 100%;
+          }
+
+          .searchbar {
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          #sortSelect {
+            width: 100%;
+          }
+
+          .filters {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .filters select,
+          .filters input,
+          .filters button {
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          header {
+            gap: 8px;
+          }
+
+          input[type="search"], input[type="text"], input[type="number"], input[type="date"], select {
+            min-width: 0;
+            width: 100%;
+          }
+
+          .book-cover {
+            flex: 0 0 clamp(60px, 18vw, 120px) !important;
+          }
+
+          [data-id] {
+            flex-wrap: wrap;
+          }
+
+          [data-id] > div:last-child {
+            width: 100%;
+            text-align: left !important;
+          }
+        }
+    </style>
+
   </head>
+
     <body>
-    <div class="app" role="application" aria-label="Library manager">
-      <header>
-        <div>
-          <h1>Alaniz Library</h1>
-          <div class="small" style="display:none">Fields: ISBN, Title, Quantity, Description, Authors, Publisher, Published, Pages, Language, Location</div>
-        </div>
-
-        <div class="controls">
-          <div class="searchbar" title="Search">
-            <input id="searchInput" type="search" placeholder="Search title, authors, ISBN, language, location" aria-label="Search books" title="Search title, authors, ISBN, language, location">
-            <select id="sortSelect" title="Sort">
-              <option value="title">Sort: Title</option>
-              <option value="authors">Sort: Authors</option>
-              <option value="published">Sort: Published</option>
-              <option value="added">Sort: Date added</option>
-            </select>
+      <div class="app" role="application" aria-label="Library manager">
+        <header>
+          <div>
+            <h1>Alaniz Library</h1>
+            <div class="small" style="display:none">Fields: ISBN, Title, Quantity, Description, Authors, Publisher, Published, Pages, Language, Location</div>
           </div>
 
-          <div class="filters">
-            <select id="langFilter" title="Filter by language">
-              <option value="">All languages</option>
-              <option value="English">English</option>
-              <option value="Spanish">Spanish</option>
-            </select>
-            <select id="locFilter" title="Filter by location">
-              <option value="">All locations</option>
-              <option value="Upstairs">Upstairs</option>
-              <option value="Living Room">Living Room</option>
-              <option value="Kitchen">Kitchen</option>
-              <option value="Parents Room">Parent's Room</option>
-              <option value="Jaelles Room">Jaelle's Room</option>
-            </select>
-            <button class="btn ghost" id="themeBtn" title="Toggle light/dark mode">🌙</button>
-            <button class="btn ghost" id="myBooksBtn" title="My checked out books" style="display:none">My Books</button>
-            <button class="btn ghost" id="exportBtn">Export</button>
-            <button class="btn secondary" id="signinBtn">Sign in</button>
+          <div class="controls">
+            <div class="searchbar" title="Search">
+              <input id="searchInput" type="search" placeholder="Search title, authors, ISBN, language, location" aria-label="Search books" title="Search title, authors, ISBN, language, location">
+              <select id="sortSelect" title="Sort">
+                <option value="title">Sort: Title</option>
+                <option value="authors">Sort: Authors</option>
+                <option value="published">Sort: Published</option>
+                <option value="added">Sort: Date added</option>
+              </select>
+            </div>
+
+            <div class="filters">
+              <select id="langFilter" title="Filter by language">
+                <option value="">All languages</option>
+                <option value="English">English</option>
+                <option value="Spanish">Spanish</option>
+              </select>
+              <select id="locFilter" title="Filter by location">
+                <option value="">All locations</option>
+                <option value="Upstairs">Upstairs</option>
+                <option value="Living Room">Living Room</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Parents Room">Parent's Room</option>
+                <option value="Jaelles Room">Jaelle's Room</option>
+              </select>
+              <button class="btn ghost" id="themeBtn" title="Toggle light/dark mode">🌙</button>
+              <button class="btn ghost" id="myBooksBtn" title="My checked out books" style="display:none">My Books</button>
+              <button class="btn ghost" id="exportBtn">Export</button>
+              <button class="btn secondary" id="signinBtn">Sign in</button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
       <div class="grid">
         <section class="panel" aria-labelledby="libraryList">
@@ -596,1164 +598,1163 @@
           </div>
         </aside>
       </div>
-    </div>
 
-    <div id="modalRoot" aria-hidden="true"></div>
+      <div id="modalRoot" aria-hidden="true"></div>
 
-    <script>
-    /* ======= Config & storage ======= */
-    const STORAGE_KEY = 'myLibraryBooks_v3';
-    const USER_KEY = 'myLibraryUser';
+      <script>
+        /* ======= Config & storage ======= */
+        const STORAGE_KEY = 'myLibraryBooks_v3';
+        const USER_KEY = 'myLibraryUser';
 
-    function uid(prefix='b'){
-      return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-    }
-
-    function loadBooks(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(!raw) return [];
-        return JSON.parse(raw);
-      }catch(e){
-        console.error('Failed to parse storage', e);
-        return [];
-      }
-    }
-    function saveBooks(list){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-    }
-
-    function loadUser(){
-      try{
-        const raw = localStorage.getItem(USER_KEY);
-        if(!raw) return null;
-        return JSON.parse(raw);
-      }catch(e){
-        return null;
-      }
-    }
-    function saveUser(u){
-      localStorage.setItem(USER_KEY, JSON.stringify(u));
-    }
-
-    /* ======= App state ======= */
-    let books = loadBooks();
-    let currentUser = loadUser();
-
-    /* ======= Theme ======= */
-    let currentTheme = localStorage.getItem('libraryTheme') || 'dark';
-    function applyTheme(theme){
-      currentTheme = theme;
-      localStorage.setItem('libraryTheme', theme);
-      const root = document.documentElement;
-      const btn = document.getElementById('themeBtn');
-      if(theme === 'light'){
-        root.classList.add('light');
-        root.style.background = 'linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%)';
-        document.body.style.background = 'transparent';
-        if(btn) btn.textContent = '☀️';
-      } else {
-        root.classList.remove('light');
-        root.style.background = 'linear-gradient(180deg, #041022 0%, #071226 100%)';
-        document.body.style.background = 'transparent';
-        if(btn) btn.textContent = '🌙';
-      }
-    }
-
-    // Apply theme immediately before anything renders
-    (function(){
-      const saved = localStorage.getItem('libraryTheme') || 'dark';
-      const root = document.documentElement;
-      if(saved === 'light'){
-        root.classList.add('light');
-        root.style.background = 'linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%)';
-      } else {
-        root.style.background = 'linear-gradient(180deg, #041022 0%, #071226 100%)';
-      }
-      document.body.style.background = 'transparent';
-    })();
-
-    applyTheme(currentTheme);
-    document.getElementById('themeBtn').addEventListener('click', ()=>{
-      applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
-    });
-
-    /* ======= Modal helpers ======= */
-    const modalRoot = document.getElementById('modalRoot');
-    function openModal(htmlContent){
-      modalRoot.innerHTML = '';
-      const backdrop = document.createElement('div');
-      backdrop.className = 'modal-backdrop';
-      backdrop.innerHTML = `<div class="modal">${htmlContent}</div>`;
-      backdrop.addEventListener('click', (e)=>{
-        if(e.target === backdrop) closeModal();
-      });
-      modalRoot.appendChild(backdrop);
-      modalRoot.setAttribute('aria-hidden','false');
-      return backdrop.querySelector('.modal');
-    }
-    function closeModal(){
-      modalRoot.innerHTML = '';
-      modalRoot.setAttribute('aria-hidden','true');
-    }
-
-    /* ======= Rendering ======= */
-    const booksContainer = document.getElementById('booksContainer');
-    const searchInput = document.getElementById('searchInput');
-    const langFilter = document.getElementById('langFilter');
-    const locFilter = document.getElementById('locFilter');
-    const sortSelect = document.getElementById('sortSelect');
-    const signinBtn = document.getElementById('signinBtn');
-
-    function render(){
-      // update sign-in button text
-      const myBooksBtn = document.getElementById('myBooksBtn');
-      if(currentUser && currentUser.name){
-        signinBtn.textContent = `Signed in: ${currentUser.name}`;
-        signinBtn.classList.remove('btn','secondary');
-        signinBtn.classList.add('btn','ghost');
-        myBooksBtn.style.display = '';
-      } else {
-        signinBtn.textContent = 'Sign in';
-        signinBtn.classList.remove('btn','ghost');
-        signinBtn.classList.add('btn','secondary');
-        myBooksBtn.style.display = 'none';
-      }
-
-      const q = searchInput.value.trim().toLowerCase();
-      const langQ = langFilter.value.trim().toLowerCase();
-      const locQ = locFilter.value.trim().toLowerCase();
-      const sortBy = sortSelect.value;
-
-      let list = [...books];
-
-      if(langQ) list = list.filter(b => (b.language||'').toLowerCase().includes(langQ));
-      if(locQ) list = list.filter(b => (b.location||'').toLowerCase().includes(locQ));
-
-      if(q){
-        list = list.filter(b => {
-          return ['title','authors','isbn','description','publisher','language','location'].some(k=>{
-            return (b[k]||'').toString().toLowerCase().includes(q);
-          });
-        });
-      }
-
-      list.sort((a,b)=>{
-        if(sortBy==='title') return (a.title||'').localeCompare(b.title||'');
-        if (sortBy === 'authors') {
-          const lastNameA = (a.authors || '').split(' ').pop();
-          const lastNameB = (b.authors || '').split(' ').pop();
-          return lastNameA.localeCompare(lastNameB);
+        function uid(prefix='b'){
+          return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
         }
-        if(sortBy==='published') return (new Date(b.published||0)) - (new Date(a.published||0));
-        return (b.added||0) - (a.added||0);
-      });
 
-      if(list.length === 0){
-        booksContainer.innerHTML = `<div class="empty"><strong>No books found</strong><div class="small">Add books or import your Orca Scan export.</div></div>`;
-        renderStats(list);
-        return;
-      }
-
-      const rows = list.map(b => {
-        const authors = escapeHtml(b.authors || '');
-        const tags = (b.language ? `<span class="tag">${escapeHtml(b.language)}</span>` : '') + (b.pages ? ` <span class="pill">${escapeHtml(b.pages)}p</span>` : '');
-        const qty = `<div class="small">Qty: ${escapeHtml(String(b.quantity||1))}</div>`;
-        const pub = b.published ? `<div class="small">Published: ${escapeHtml(b.published)}</div>` : '';
-        const checked = b.checkedOut ? true : false;
-        const checkedBy = checked ? escapeHtml(b.checkedOut.byName || 'Someone') : '';
-        const checkedBadge = checked ? `<span class="pill">Checked out</span>` : '';
-        const containerClass = checked ? 'checked' : '';
-        return `
-          <div class="${containerClass}" style="display:flex; gap:16px; align-items:flex-start; padding:10px 0; cursor:pointer;" data-id="${b.id}">
-            <div class="book-cover" style="flex:0 0 120px;">
-              <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="width:100%; border-radius:6px;">
-            </div>
-
-            <div style="flex:1;">
-              <div style="display:flex; gap:12px; align-items:flex-start;">
-                <div style="min-width:6px; height:36px; border-radius:6px; background:linear-gradient(180deg,var(--accent),var(--accent-2));"></div>
-                <div>
-                  <div style="font-weight:700">${escapeHtml(b.title||'Untitled')} ${checkedBadge}</div>
-                  <div class="small">${authors || '—'}</div>
-                  <div style="margin-top:6px">${tags} ${pub} ${qty}</div>
-                  <div class="small" style="margin-top:6px">${escapeHtml((b.description||'').slice(0,180))}${(b.description||'').length>180 ? '…' : ''}</div>
-            ${checked ? `<div class="small" style="margin-top:6px">Checked out by <span class="user-badge">${checkedBy}</span></div>` : ''}
-          </div>
-        </div>
-      </div>
-
-      <div style="text-align:right; white-space:nowrap;">
-        <div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>
-      </div>
-
-    </div>
-        `;
-      }).join('<hr style="border:none;border-top:1px solid var(--border)">');
-
-      booksContainer.innerHTML = rows;
-
-      // attach click to open detail when clicking the row (but not the edit/delete buttons)
-      booksContainer.querySelectorAll('[data-id]').forEach(el=>{
-        el.addEventListener('click', (e)=>{
-          const target = e.target;
-          // ignore clicks on buttons inside the row
-          if(target.closest('button')) return;
-          const id = el.dataset.id;
-          openDetailModal(id);
-        });
-      });
-
-      renderStats(list);
-    }
-
-    function renderStats(list = books){
-      const area = document.getElementById('statsArea');
-      const total = list.reduce((s,b)=> s + (Number(b.quantity)||0), 0);
-      const count = list.length;
-      const langs = [...new Set(list.map(b => (b.language||'').trim()).filter(Boolean))].slice(0,20);
-      const checkedCount = list.filter(b => b.checkedOut).length;
-      const booksWithPages = list.filter(b => Number(b.pages) > 0);
-      const booksWithDate = list.filter(b => b.published && !isNaN(new Date(b.published)));
-      const longest = booksWithPages.sort((a,b) => Number(b.pages) - Number(a.pages))[0];
-      const shortest = booksWithPages.sort((a,b) => Number(a.pages) - Number(b.pages))[0];
-
-      const oldest = booksWithDate.sort((a,b) => new Date(a.published) - new Date(b.published))[0];
-      const newest = booksWithDate.sort((a,b) => new Date(b.published) - new Date(a.published))[0];
-
-      area.innerHTML = `
-        <div><strong>${count}</strong> titles · <strong>${total}</strong> copies</div>
-        <div class="small">Checked out: ${checkedCount} · Languages: ${langs.length || 0}</div>
-        <div style="margin-top:8px">${langs.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join(' ') || '<span class="small">No languages set</span>'}</div>
-        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0;">
-        <div class="small" style="margin-bottom:6px"><strong>Fun facts</strong></div>
-        ${longest ? `<div class="small">Longest book: <strong>${escapeHtml(longest.title)}</strong> (${longest.pages}p)</div><br>` : ''}
-        ${shortest && shortest.id !== longest?.id ? `<div class="small">Shortest book: <strong>${escapeHtml(shortest.title)}</strong> (${shortest.pages}p)</div><br>` : ''}
-        ${oldest ? `<div class="small">Oldest book: <strong>${escapeHtml(oldest.title)}</strong> (${oldest.published?.slice(0,4)})</div><br>` : ''}
-        ${newest && newest.id !== oldest?.id ? `<div class="small">Newest book: <strong>${escapeHtml(newest.title)}</strong> (${newest.published?.slice(0,4)})</div>` : ''}
-      `;
-    }
-
-    /* ======= CRUD ======= */
-    function addBook(data){
-      const b = {
-        id: uid(),
-        isbn: data.isbn||'',
-        title: data.title||'Untitled',
-        quantity: Number(data.quantity) || 1,
-        description: data.description||'',
-        authors: data.authors||'',
-        publisher: data.publisher||'',
-        published: data.published||'',
-        pages: data.pages||'',
-        language: data.language||'',
-        location: data.location||'',
-        checkedOut: data.checkedOut || null,
-        added: Date.now()
-      };
-      books.unshift(b);
-      saveBooks(books);
-      render();
-      return b;
-    }
-    function updateBook(id, data){
-      const idx = books.findIndex(x=>x.id===id);
-      if(idx===-1) return;
-      books[idx] = {...books[idx], ...data};
-      saveBooks(books);
-      render();
-    }
-    function deleteBook(id){
-      if(!confirm('Delete this book?')) return;
-      books = books.filter(b=>b.id!==id);
-      saveBooks(books);
-      render();
-    }
-
-    /* ======= Add/Edit modal ======= */
-    function openAddModal(prefill={}){
-      const html = `
-        <h3>${prefill.id ? 'Edit Book' : 'Add Book'}</h3>
-        <div style="margin-top:8px;">
-          <div class="form-row">
-            <div style="flex:2">
-              <label>Title</label>
-              <input id="m_title" type="text" value="${escapeHtml(prefill.title||'')}" />
-            </div>
-            <div style="flex:1">
-              <label>Quantity</label>
-              <input id="m_quantity" type="number" min="1" value="${escapeHtml(prefill.quantity||1)}" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div style="flex:1">
-              <label>Authors</label>
-              <input id="m_authors" type="text" value="${escapeHtml(prefill.authors||'')}" />
-            </div>
-            <div style="flex:1">
-              <label>ISBN</label>
-              <input id="m_isbn" type="text" value="${escapeHtml(prefill.isbn||'')}" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div style="flex:1">
-              <label>Publisher</label>
-              <input id="m_publisher" type="text" value="${escapeHtml(prefill.publisher||'')}" />
-            </div>
-            <div style="flex:1">
-              <label>Published (date)</label>
-              <input id="m_published" type="date" value="${escapeHtml(prefill.published||'')}" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div style="flex:1">
-              <label>Pages</label>
-              <input id="m_pages" type="number" min="1" value="${escapeHtml(prefill.pages||'')}" />
-            </div>
-            <div style="flex:1">
-              <label>Language</label>
-              <input id="m_language" type="text" value="${escapeHtml(prefill.language||'')}" />
-            </div>
-          </div>
-
-          <div>
-            <label>Location</label>
-            <select id="m_location">
-              <option value="">— Select location —</option>
-              <option value="Upstairs" ${prefill.location==='Upstairs' ? 'selected' : ''}>Upstairs</option>
-              <option value="Living Room" ${prefill.location==='Living Room' ? 'selected' : ''}>Living Room</option>
-              <option value="Kitchen" ${prefill.location==='Kitchen' ? 'selected' : ''}>Kitchen</option>
-              <option value="Parents Room" ${prefill.location==='Parents Room' ? 'selected' : ''}>Parent's Room</option>
-              <option value="Jaelles Room" ${prefill.location==='Jaelles Room' ? 'selected' : ''}>Jaelle's Room</option>
-            </select>
-          </div>
-
-          <div style="margin-top:8px;">
-            <label>Description</label>
-            <textarea id="m_description">${escapeHtml(prefill.description||'')}</textarea>
-          </div>
-
-          <div class="footer">
-            <div class="small">Fields saved locally in your browser.</div>
-            <div>
-              <button class="btn secondary" id="cancelModal">Cancel</button>
-              <button class="btn" id="saveModal">${prefill.id ? 'Save changes' : 'Add book'}</button>
-            </div>
-          </div>
-        </div>
-      `;
-      const modal = openModal(html);
-      modal.querySelector('#cancelModal').addEventListener('click', closeModal);
-      modal.querySelector('#saveModal').addEventListener('click', ()=>{
-        const data = {
-          title: modal.querySelector('#m_title').value.trim(),
-          quantity: modal.querySelector('#m_quantity').value.trim(),
-          authors: modal.querySelector('#m_authors').value.trim(),
-          isbn: modal.querySelector('#m_isbn').value.trim(),
-          publisher: modal.querySelector('#m_publisher').value.trim(),
-          published: modal.querySelector('#m_published').value,
-          pages: modal.querySelector('#m_pages').value.trim(),
-          language: modal.querySelector('#m_language').value.trim(),
-          location: modal.querySelector('#m_location').value.trim(),
-          description: modal.querySelector('#m_description').value.trim()
-        };
-        if(prefill.id){
-          updateBook(prefill.id, data);
-        }else{
-          addBook(data);
-        }
-        closeModal();
-      });
-    }
-
-    function openEditModal(id){
-      const b = books.find(x=>x.id===id);
-      if(!b) return;
-      openAddModal(b);
-    }
-
-    /* ======= Book detail modal + checkout logic ======= */
-    function openDetailModal(id){
-      const b = books.find(x=>x.id===id);
-      if(!b) return;
-      const checked = b.checkedOut ? true : false;
-      const checkedBy = checked ? escapeHtml(b.checkedOut.byName || '') : '';
-      const checkedEmail = checked ? escapeHtml(b.checkedOut.byEmail || '') : '';
-      const html = `
-        <h3>Book Details</h3>
-
-          <div style="display:flex; gap:16px; margin-top:8px;">
-
-            <div style="flex:0 0 150px;">
-              <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="width:100%; max-width:150px; border-radius:6px;">
-            </div>
-
-          <div style="flex:1;">
-            <div style="font-weight:700; font-size:18px;">${escapeHtml(b.title||'Untitled')}</div>
-          <div class="small">${escapeHtml(b.authors||'—')}</div>
-          <div style="margin-top:8px;">${escapeHtml(b.description||'')}</div>
-        <div style="margin-top:12px;">
-          <div class="small">ISBN: <strong>${escapeHtml(b.isbn||'—')}</strong></div>
-          <div class="small">Publisher: ${escapeHtml(b.publisher||'—')}</div>
-          <div class="small">Published: ${escapeHtml(b.published||'—')}</div>
-          <div class="small">Pages: ${escapeHtml(b.pages||'—')}</div>
-          <div class="small">Language: ${escapeHtml(b.language||'—')}</div>
-          <div class="small">Location: ${escapeHtml(b.location||'—')}</div>
-          <div class="small">Quantity: ${escapeHtml(String(b.quantity||1))}</div>
-          <div style="margin-top:8px;">${checked ? `<div class="small">Checked out by <span class="user-badge">${checkedBy}</span></div>` : `<div class="small">Available</div>`}</div>
-        </div>
-          <div style="margin-top:16px; display:flex; gap:8px; justify-content:flex-end;">
-            ${checked 
-              ? (currentUser && currentUser.name === b.checkedOut.byName 
-                  ? `<button class="btn" id="returnBtn">Return book</button>` 
-                  : `<button class="btn secondary" id="requestBtn">Request book</button>`)
-              : `<button class="btn" id="checkoutBtn">Check out</button>`}
-            <button class="btn secondary" id="closeDetail">Close</button>
-          </div>
-          </div>
-        </div>
-      `;
-      const modal = openModal(html);
-      modal.querySelector('#closeDetail').addEventListener('click', closeModal);
-
-      if(!checked){
-        modal.querySelector('#checkoutBtn').addEventListener('click', ()=>{
-          // if signed in, use user; otherwise prompt for name (and optional email)
-          if(currentUser && currentUser.name){
-            performCheckout(b.id, currentUser.name, currentUser.email || '');
-            closeModal();
-          } else {
-            openQuickCheckoutModal(b.id);
+        function loadBooks(){
+          try{
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if(!raw) return [];
+            return JSON.parse(raw);
+          }catch(e){
+            console.error('Failed to parse storage', e);
+            return [];
           }
+        }
+        function saveBooks(list){
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        }
+
+        function loadUser(){
+          try{
+            const raw = localStorage.getItem(USER_KEY);
+            if(!raw) return null;
+            return JSON.parse(raw);
+          }catch(e){
+            return null;
+          }
+        }
+        function saveUser(u){
+          localStorage.setItem(USER_KEY, JSON.stringify(u));
+        }
+
+        /* ======= App state ======= */
+        let books = loadBooks();
+        let currentUser = loadUser();
+
+        /* ======= Theme ======= */
+        let currentTheme = localStorage.getItem('libraryTheme') || 'dark';
+        function applyTheme(theme){
+          currentTheme = theme;
+          localStorage.setItem('libraryTheme', theme);
+          const root = document.documentElement;
+          const btn = document.getElementById('themeBtn');
+          if(theme === 'light'){
+            root.classList.add('light');
+            root.style.background = 'linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%)';
+            document.body.style.background = 'transparent';
+            if(btn) btn.textContent = '☀️';
+          } else {
+            root.classList.remove('light');
+            root.style.background = 'linear-gradient(180deg, #041022 0%, #071226 100%)';
+            document.body.style.background = 'transparent';
+            if(btn) btn.textContent = '🌙';
+          }
+        }
+
+        // Apply theme immediately before anything renders
+        (function(){
+          const saved = localStorage.getItem('libraryTheme') || 'dark';
+          const root = document.documentElement;
+          if(saved === 'light'){
+            root.classList.add('light');
+            root.style.background = 'linear-gradient(180deg, #e8eef5 0%, #f0f4f8 100%)';
+          } else {
+            root.style.background = 'linear-gradient(180deg, #041022 0%, #071226 100%)';
+          }
+          document.body.style.background = 'transparent';
+        })();
+
+        applyTheme(currentTheme);
+        document.getElementById('themeBtn').addEventListener('click', ()=>{
+          applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
         });
-      } else {
-        if(currentUser && currentUser.name === b.checkedOut.byName){
-          modal.querySelector('#returnBtn').addEventListener('click', ()=>{
-            if(!confirm('Mark this book as returned?')) return;
-            performReturn(b.id);
-            closeModal();
+
+        /* ======= Modal helpers ======= */
+        const modalRoot = document.getElementById('modalRoot');
+        function openModal(htmlContent){
+          modalRoot.innerHTML = '';
+          const backdrop = document.createElement('div');
+          backdrop.className = 'modal-backdrop';
+          backdrop.innerHTML = `<div class="modal">${htmlContent}</div>`;
+          backdrop.addEventListener('click', (e)=>{
+            if(e.target === backdrop) closeModal();
           });
-        } else {
-          modal.querySelector('#requestBtn').addEventListener('click', ()=>{
-            // open request flow: if checkedOut.byEmail exists, open mailto; otherwise show message
-            if(b.checkedOut && b.checkedOut.byEmail){
-              const requesterName = currentUser && currentUser.name ? currentUser.name : prompt('Your name (for the request):') || 'Someone';
-              const requesterEmail = currentUser && currentUser.email ? currentUser.email : prompt('Your email (optional):') || '';
-              const subject = `Request for book: ${b.title}`;
-              const body = `Hello ${b.checkedOut.byName || ''},
+          modalRoot.appendChild(backdrop);
+          modalRoot.setAttribute('aria-hidden','false');
+          return backdrop.querySelector('.modal');
+        }
+        function closeModal(){
+          modalRoot.innerHTML = '';
+          modalRoot.setAttribute('aria-hidden','true');
+        }
 
-    This is a book request from ${requesterName}${requesterEmail ? ` (${requesterEmail})` : ''} requesting the book "${b.title}" (ISBN: ${b.isbn || '—'}). Please respond to this email if you are able to return it or coordinate a pickup time.
+        /* ======= Rendering ======= */
+        const booksContainer = document.getElementById('booksContainer');
+        const searchInput = document.getElementById('searchInput');
+        const langFilter = document.getElementById('langFilter');
+        const locFilter = document.getElementById('locFilter');
+        const sortSelect = document.getElementById('sortSelect');
+        const signinBtn = document.getElementById('signinBtn');
 
-    Thanks,
-    The Alaniz Library`;
-              // open mailto link
-              const mailto = `mailto:${encodeURIComponent(b.checkedOut.byEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-              window.open(mailto, '_blank');
-            } else {
-              alert('No email is available for the person who checked this out.');
+        function render(){
+          // update sign-in button text
+          const myBooksBtn = document.getElementById('myBooksBtn');
+          if(currentUser && currentUser.name){
+            signinBtn.textContent = `Signed in: ${currentUser.name}`;
+            signinBtn.classList.remove('btn','secondary');
+            signinBtn.classList.add('btn','ghost');
+            myBooksBtn.style.display = '';
+          } else {
+            signinBtn.textContent = 'Sign in';
+            signinBtn.classList.remove('btn','ghost');
+            signinBtn.classList.add('btn','secondary');
+            myBooksBtn.style.display = 'none';
+          }
+
+          const q = searchInput.value.trim().toLowerCase();
+          const langQ = langFilter.value.trim().toLowerCase();
+          const locQ = locFilter.value.trim().toLowerCase();
+          const sortBy = sortSelect.value;
+
+          let list = [...books];
+
+          if(langQ) list = list.filter(b => (b.language||'').toLowerCase().includes(langQ));
+          if(locQ) list = list.filter(b => (b.location||'').toLowerCase().includes(locQ));
+
+          if(q){
+            list = list.filter(b => {
+              return ['title','authors','isbn','description','publisher','language','location'].some(k=>{
+                return (b[k]||'').toString().toLowerCase().includes(q);
+              });
+            });
+          }
+
+          list.sort((a,b)=>{
+            if(sortBy==='title') return (a.title||'').localeCompare(b.title||'');
+            if (sortBy === 'authors') {
+              const lastNameA = (a.authors || '').split(' ').pop();
+              const lastNameB = (b.authors || '').split(' ').pop();
+              return lastNameA.localeCompare(lastNameB);
             }
+            if(sortBy==='published') return (new Date(b.published||0)) - (new Date(a.published||0));
+            return (b.added||0) - (a.added||0);
           });
-        }
-      }
-    }
 
-    /* Quick checkout modal when not signed in */
-    function openQuickCheckoutModal(bookId){
-      const html = `
-        <h3>Check out book</h3>
-        <div style="margin-top:8px;">
-          <div class="small">Enter your name (required) and email (optional).</div>
-          <div style="margin-top:8px;">
-            <label>Name</label>
-            <input id="co_name" type="text" />
-          </div>
-          <div style="margin-top:8px;">
-            <label>Email (optional)</label>
-            <input id="co_email" type="text" />
-          </div>
-          <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
-            <button class="btn secondary" id="cancelCo">Cancel</button>
-            <button class="btn" id="confirmCo">Check out</button>
-          </div>
-        </div>
-      `;
-      const modal = openModal(html);
-      modal.querySelector('#cancelCo').addEventListener('click', closeModal);
-      modal.querySelector('#confirmCo').addEventListener('click', ()=>{
-        const name = modal.querySelector('#co_name').value.trim();
-        const email = modal.querySelector('#co_email').value.trim();
-        if(!name){
-          alert('Please enter your name to check out the book.');
-          return;
-        }
-        // optionally save as current user
-        if(confirm('Save this name and email as your sign-in for future actions?')){
-          currentUser = { name, email };
-          saveUser(currentUser);
-        }
-        performCheckout(bookId, name, email);
-        closeModal();
-      });
-    }
+          if(list.length === 0){
+            booksContainer.innerHTML = `<div class="empty"><strong>No books found</strong><div class="small">Add books or import your Orca Scan export.</div></div>`;
+            renderStats(list);
+            return;
+          }
 
-    /* perform checkout and return */
-    function performCheckout(bookId, byName, byEmail){
-      const idx = books.findIndex(b => b.id === bookId);
-      if(idx === -1) return;
-      books[idx].checkedOut = {
-        byName: byName,
-        byEmail: byEmail || '',
-        date: new Date().toISOString()
-      };
-      saveBooks(books);
-      render();
-      // Sync to Google Sheets
-      writeCheckoutToSheet(bookId, 'checkout', byName, byEmail, books[idx].checkedOut.date);
-    }
-
-    function performReturn(bookId){
-      const idx = books.findIndex(b => b.id === bookId);
-      if(idx === -1) return;
-      books[idx].checkedOut = null;
-      saveBooks(books);
-      render();
-      // Sync to Google Sheets
-      writeCheckoutToSheet(bookId, 'return', '', '', '');
-    }
-
-    /* ======= My Books modal ======= */
-    document.getElementById('myBooksBtn').addEventListener('click', ()=>{
-      openMyBooksModal();
-    });
-
-    function openMyBooksModal(){
-      if(!currentUser || !currentUser.name) return;
-
-      const myBooks = books.filter(b => b.checkedOut && b.checkedOut.byName === currentUser.name);
-
-      const bookRows = myBooks.length === 0
-        ? `<div class="empty"><strong>You have no books checked out.</strong></div>`
-        : myBooks.map(b => {
-            const checkoutDate = b.checkedOut.date
-              ? new Date(b.checkedOut.date).toLocaleDateString()
-              : '—';
-            const pages = b.pages ? `<span class="pill">${escapeHtml(b.pages)}p</span>` : '';
-            const lang = b.language ? `<span class="tag">${escapeHtml(b.language)}</span>` : '';
+          const rows = list.map(b => {
+            const authors = escapeHtml(b.authors || '');
+            const tags = (b.language ? `<span class="tag">${escapeHtml(b.language)}</span>` : '') + (b.pages ? ` <span class="pill">${escapeHtml(b.pages)}p</span>` : '');
+            const qty = `<div class="small">Qty: ${escapeHtml(String(b.quantity||1))}</div>`;
             const pub = b.published ? `<div class="small">Published: ${escapeHtml(b.published)}</div>` : '';
-            const publisher = b.publisher ? `<div class="small">Publisher: ${escapeHtml(b.publisher)}</div>` : '';
-            const location = b.location ? `<div class="small">Location: ${escapeHtml(b.location)}</div>` : '';
+            const checked = b.checkedOut ? true : false;
+            const checkedBy = checked ? escapeHtml(b.checkedOut.byName || 'Someone') : '';
+            const checkedBadge = checked ? `<span class="pill">Checked out</span>` : '';
+            const containerClass = checked ? 'checked' : '';
             return `
-              <div style="display:flex; gap:16px; align-items:flex-start; padding:12px 0;" data-bookid="${escapeHtml(b.id)}">
-                <div style="flex:0 0 80px;">
-                  <img
-                    src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg"
-                    onerror="this.onerror=null; this.style.background='rgba(255,255,255,0.05)'; this.style.minHeight='80px'; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22140%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23162032%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%239aa4b2%22 font-size=%2211%22>No cover</text></svg>';"
-                    style="width:100%; height:110px; object-fit:cover; border-radius:6px;">
+              <div class="${containerClass}" style="display:flex; gap:16px; align-items:flex-start; padding:10px 0; cursor:pointer;" data-id="${b.id}">
+                <div class="book-cover" style="flex:0 0 120px;">
+                  <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="width:100%; border-radius:6px;">
                 </div>
+
                 <div style="flex:1;">
-                  <div style="font-weight:700; font-size:15px;">${escapeHtml(b.title||'Untitled')}</div>
-                  <div class="small">${escapeHtml(b.authors||'—')}</div>
-                  <div style="margin-top:6px;">${lang} ${pages}</div>
-                  ${pub}
-                  ${publisher}
-                  <div class="small">ISBN: ${escapeHtml(b.isbn||'—')}</div>
-                  ${location}
-                  <div class="small" style="margin-top:4px; color:var(--accent)">Checked out: ${checkoutDate}</div>
+                  <div style="display:flex; gap:12px; align-items:flex-start;">
+                    <div style="min-width:6px; height:36px; border-radius:6px; background:linear-gradient(180deg,var(--accent),var(--accent-2));"></div>
+                    <div>
+                      <div style="font-weight:700">${escapeHtml(b.title||'Untitled')} ${checkedBadge}</div>
+                      <div class="small">${authors || '—'}</div>
+                      <div style="margin-top:6px">${tags} ${pub} ${qty}</div>
+                      <div class="small" style="margin-top:6px">${escapeHtml((b.description||'').slice(0,180))}${(b.description||'').length>180 ? '…' : ''}</div>
+                ${checked ? `<div class="small" style="margin-top:6px">Checked out by <span class="user-badge">${checkedBy}</span></div>` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align:right; white-space:nowrap;">
+            <div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>
+          </div>
+
+        </div>
+            `;
+          }).join('<hr style="border:none;border-top:1px solid var(--border)">');
+
+          booksContainer.innerHTML = rows;
+
+          // attach click to open detail when clicking the row (but not the edit/delete buttons)
+          booksContainer.querySelectorAll('[data-id]').forEach(el=>{
+            el.addEventListener('click', (e)=>{
+              const target = e.target;
+              // ignore clicks on buttons inside the row
+              if(target.closest('button')) return;
+              const id = el.dataset.id;
+              openDetailModal(id);
+            });
+          });
+
+          renderStats(list);
+        }
+
+        function renderStats(list = books){
+          const area = document.getElementById('statsArea');
+          const total = list.reduce((s,b)=> s + (Number(b.quantity)||0), 0);
+          const count = list.length;
+          const langs = [...new Set(list.map(b => (b.language||'').trim()).filter(Boolean))].slice(0,20);
+          const checkedCount = list.filter(b => b.checkedOut).length;
+          const booksWithPages = list.filter(b => Number(b.pages) > 0);
+          const booksWithDate = list.filter(b => b.published && !isNaN(new Date(b.published)));
+          const longest = booksWithPages.sort((a,b) => Number(b.pages) - Number(a.pages))[0];
+          const shortest = booksWithPages.sort((a,b) => Number(a.pages) - Number(b.pages))[0];
+
+          const oldest = booksWithDate.sort((a,b) => new Date(a.published) - new Date(b.published))[0];
+          const newest = booksWithDate.sort((a,b) => new Date(b.published) - new Date(a.published))[0];
+
+          area.innerHTML = `
+            <div><strong>${count}</strong> titles · <strong>${total}</strong> copies</div>
+            <div class="small">Checked out: ${checkedCount} · Languages: ${langs.length || 0}</div>
+            <div style="margin-top:8px">${langs.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join(' ') || '<span class="small">No languages set</span>'}</div>
+            <hr style="border:none; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0;">
+            <div class="small" style="margin-bottom:6px"><strong>Fun facts</strong></div>
+            ${longest ? `<div class="small">Longest book: <strong>${escapeHtml(longest.title)}</strong> (${longest.pages}p)</div><br>` : ''}
+            ${shortest && shortest.id !== longest?.id ? `<div class="small">Shortest book: <strong>${escapeHtml(shortest.title)}</strong> (${shortest.pages}p)</div><br>` : ''}
+            ${oldest ? `<div class="small">Oldest book: <strong>${escapeHtml(oldest.title)}</strong> (${oldest.published?.slice(0,4)})</div><br>` : ''}
+            ${newest && newest.id !== oldest?.id ? `<div class="small">Newest book: <strong>${escapeHtml(newest.title)}</strong> (${newest.published?.slice(0,4)})</div>` : ''}
+          `;
+        }
+
+        /* ======= CRUD ======= */
+        function addBook(data){
+          const b = {
+            id: uid(),
+            isbn: data.isbn||'',
+            title: data.title||'Untitled',
+            quantity: Number(data.quantity) || 1,
+            description: data.description||'',
+            authors: data.authors||'',
+            publisher: data.publisher||'',
+            published: data.published||'',
+            pages: data.pages||'',
+            language: data.language||'',
+            location: data.location||'',
+            checkedOut: data.checkedOut || null,
+            added: Date.now()
+          };
+          books.unshift(b);
+          saveBooks(books);
+          render();
+          return b;
+        }
+        function updateBook(id, data){
+          const idx = books.findIndex(x=>x.id===id);
+          if(idx===-1) return;
+          books[idx] = {...books[idx], ...data};
+          saveBooks(books);
+          render();
+        }
+        function deleteBook(id){
+          if(!confirm('Delete this book?')) return;
+          books = books.filter(b=>b.id!==id);
+          saveBooks(books);
+          render();
+        }
+
+        /* ======= Add/Edit modal ======= */
+        function openAddModal(prefill={}){
+          const html = `
+            <h3>${prefill.id ? 'Edit Book' : 'Add Book'}</h3>
+            <div style="margin-top:8px;">
+              <div class="form-row">
+                <div style="flex:2">
+                  <label>Title</label>
+                  <input id="m_title" type="text" value="${escapeHtml(prefill.title||'')}" />
                 </div>
-                <div style="display:flex; align-items:center;">
-                  <button class="btn" style="white-space:nowrap;" data-returnid="${escapeHtml(b.id)}">Return</button>
+                <div style="flex:1">
+                  <label>Quantity</label>
+                  <input id="m_quantity" type="number" min="1" value="${escapeHtml(prefill.quantity||1)}" />
                 </div>
               </div>
-            `;
-          }).join('<hr style="border:none; border-top:1px solid var(--border);">');
 
-      const html = `
-        <h3>My Checked Out Books</h3>
-        <div class="small" style="margin-bottom:12px;">Signed in as <strong>${escapeHtml(currentUser.name)}</strong> · ${myBooks.length} book${myBooks.length !== 1 ? 's' : ''} checked out</div>
-        <div>${bookRows}</div>
-        <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-          <button class="btn secondary" id="closeMyBooks">Close</button>
-        </div>
-      `;
+              <div class="form-row">
+                <div style="flex:1">
+                  <label>Authors</label>
+                  <input id="m_authors" type="text" value="${escapeHtml(prefill.authors||'')}" />
+                </div>
+                <div style="flex:1">
+                  <label>ISBN</label>
+                  <input id="m_isbn" type="text" value="${escapeHtml(prefill.isbn||'')}" />
+                </div>
+              </div>
 
-      const modal = openModal(html);
-      modal.querySelector('#closeMyBooks').addEventListener('click', closeModal);
+              <div class="form-row">
+                <div style="flex:1">
+                  <label>Publisher</label>
+                  <input id="m_publisher" type="text" value="${escapeHtml(prefill.publisher||'')}" />
+                </div>
+                <div style="flex:1">
+                  <label>Published (date)</label>
+                  <input id="m_published" type="date" value="${escapeHtml(prefill.published||'')}" />
+                </div>
+              </div>
 
-      modal.querySelectorAll('[data-returnid]').forEach(btn => {
-        btn.addEventListener('click', ()=>{
-          const bookId = btn.dataset.returnid;
-          const book = books.find(b => b.id === bookId);
-          if(!book) return;
-          if(!confirm(`Return "${book.title}"?`)) return;
-          performReturn(bookId);
-          closeModal();
-        });
-      });
-    }
+              <div class="form-row">
+                <div style="flex:1">
+                  <label>Pages</label>
+                  <input id="m_pages" type="number" min="1" value="${escapeHtml(prefill.pages||'')}" />
+                </div>
+                <div style="flex:1">
+                  <label>Language</label>
+                  <input id="m_language" type="text" value="${escapeHtml(prefill.language||'')}" />
+                </div>
+              </div>
 
-    /* ======= Sign-in modal ======= */
-    signinBtn.addEventListener('click', ()=>{
-      openSignInModal();
-    });
-    function openSignInModal(){
-      const html = `
-        <h3>Sign in</h3>
-        <div style="margin-top:8px;">
-          <div class="small">Enter your name and email. This will be used to auto-fill checkouts.</div>
-          <div style="margin-top:8px;">
-            <label>Name</label>
-            <input id="si_name" type="text" value="${escapeHtml(currentUser && currentUser.name || '')}" />
-          </div>
-          <div style="margin-top:8px;">
-            <label>Email</label>
-            <input id="si_email" type="text" value="${escapeHtml(currentUser && currentUser.email || '')}" />
-          </div>
-          <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
-            <button class="btn ghost" id="signoutBtn">${currentUser ? 'Sign out' : 'Cancel'}</button>
-            <button class="btn" id="saveSignIn">Save</button>
-          </div>
-        </div>
-      `;
-      const modal = openModal(html);
-      modal.querySelector('#saveSignIn').addEventListener('click', ()=>{
-        const name = modal.querySelector('#si_name').value.trim();
-        const email = modal.querySelector('#si_email').value.trim();
-        if(!name){
-          alert('Please enter a name.');
-          return;
-        }
-        currentUser = { name, email };
-        saveUser(currentUser);
-        closeModal();
-        render();
-      });
-      modal.querySelector('#signoutBtn').addEventListener('click', ()=>{
-        if(currentUser){
-          if(confirm('Sign out and clear saved name/email?')){
-            currentUser = null;
-            localStorage.removeItem(USER_KEY);
-            closeModal();
-            render();
-          }
-        } else {
-          closeModal();
-        }
-      });
-    }
-
-    /* ======= Import / Export (with mapping) ======= */
-    /* The import/export code is the same as before (keeps XLSX lazy-loading fallback) */
-    document.getElementById('exportBtn').addEventListener('click', ()=> openExportOptions());
-
-    function openExportOptions(){
-      const html = `
-        <h3>Export library</h3>
-        <div style="margin-top:8px;">
-          <div class="small">Choose an export format. Files are downloaded locally.</div>
-          <div style="margin-top:12px; display:flex; gap:8px;">
-            <button class="btn" id="exportJson">Export JSON</button>
-            <button class="btn" id="exportCsv">Export CSV</button>
-            <button class="btn secondary" id="closeExport">Close</button>
-          </div>
-        </div>
-      `;
-      const modal = openModal(html);
-      modal.querySelector('#closeExport').addEventListener('click', closeModal);
-      modal.querySelector('#exportJson').addEventListener('click', ()=>{
-        const blob = new Blob([JSON.stringify(books, null, 2)], {type:'application/json'});
-        downloadBlob(blob, `library-${new Date().toISOString().slice(0,10)}.json`);
-      });
-      modal.querySelector('#exportCsv').addEventListener('click', ()=>{
-        const csv = toCSV(books);
-        const blob = new Blob([csv], {type:'text/csv'});
-        downloadBlob(blob, `library-${new Date().toISOString().slice(0,10)}.csv`);
-      });
-    }
-
-    /* Lazy-load XLSX only when needed */
-    function loadXLSX(){
-      if(window.XLSX) return Promise.resolve(window.XLSX);
-      return new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = './libs/xlsx.full.min.js';
-        s.onerror = () => {
-          s.remove();
-          const s2 = document.createElement('script');
-          s2.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
-          s2.onload = () => resolve(window.XLSX);
-          s2.onerror = (e) => reject(new Error('Failed to load XLSX library'));
-          document.head.appendChild(s2);
-        };
-        s.onload = () => resolve(window.XLSX);
-        document.head.appendChild(s);
-      });
-    }
-
-    function openImportModal(){
-      const html = `
-        <h3>Import file</h3>
-        <div style="margin-top:8px; display:flex; flex-direction:column; gap:12px;">
-          <div class="small">Supported: CSV, JSON, XML, HTML (table), XLSX</div>
-          <div>
-            <input id="importFile" type="file" accept=".csv,.json,.xml,.html,.htm,.xlsx" />
-          </div>
-          <div id="importPreviewArea" style="margin-top:0;"></div>
-
-          <!-- sticky action row -->
-          <div class="import-actions">
-            <button class="btn secondary" id="cancelImport">Cancel</button>
-            <button class="btn" id="confirmImport" disabled>Import</button>
-          </div>
-        </div>
-      `;
-      const modal = openModal(html);
-      const fileInput = modal.querySelector('#importFile');
-      const previewArea = modal.querySelector('#importPreviewArea');
-      const confirmBtn = modal.querySelector('#confirmImport');
-      modal.querySelector('#cancelImport').addEventListener('click', closeModal);
-
-      let parsedRows = [];
-      let headers = [];
-
-      fileInput.addEventListener('change', async (e)=>{
-        const f = e.target.files[0];
-        if(!f) return;
-        const name = f.name.toLowerCase();
-        previewArea.innerHTML = `<div class="small">Parsing ${escapeHtml(f.name)}…</div>`;
-        confirmBtn.disabled = true;
-        try{
-          if(name.endsWith('.json')){
-            const text = await f.text();
-            const data = JSON.parse(text);
-            const arr = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : Object.values(data));
-            parsedRows = arr.map(obj => normalizeObject(obj));
-            headers = Object.keys(parsedRows[0]||{});
-          } else if(name.endsWith('.csv')){
-            const text = await f.text();
-            const {rows, hdrs} = parseCSV(text);
-            parsedRows = rows;
-            headers = hdrs;
-          } else if(name.endsWith('.xml')){
-            const text = await f.text();
-            const {rows, hdrs} = parseXML(text);
-            parsedRows = rows;
-            headers = hdrs;
-          } else if(name.endsWith('.html') || name.endsWith('.htm')){
-            const text = await f.text();
-            const {rows, hdrs} = parseHTMLTable(text);
-            parsedRows = rows;
-            headers = hdrs;
-          } else if(name.endsWith('.xlsx')){
-            try{
-              await loadXLSX();
-            }catch(err){
-              previewArea.innerHTML = `<div class="small">Could not load XLSX support: ${escapeHtml(err.message)}</div>`;
-              console.error(err);
-              return;
-            }
-            const arrayBuffer = await f.arrayBuffer();
-            const wb = XLSX.read(arrayBuffer, {type:'array'});
-            const first = wb.SheetNames[0];
-            const sheet = wb.Sheets[first];
-            const json = XLSX.utils.sheet_to_json(sheet, {defval:''});
-            parsedRows = json.map(obj => normalizeObject(obj));
-            headers = Object.keys(parsedRows[0]||{});
-          } else {
-            previewArea.innerHTML = `<div class="small">Unsupported file type.</div>`;
-            return;
-          }
-
-          if(parsedRows.length === 0){
-            previewArea.innerHTML = `<div class="small">No rows found in file.</div>`;
-            return;
-          }
-
-          // Build mapping UI
-          const sampleRows = parsedRows.slice(0,6);
-          const possibleFields = ['ignore','isbn','title','quantity','description','authors','publisher','published','pages','language','location'];
-          const autoMap = autoMapHeaders(headers);
-
-          let mappingHtml = `<div class="small">Preview (${parsedRows.length} rows). Map columns to fields:</div>`;
-          mappingHtml += `<div class="import-preview" style="margin-top:8px;">`;
-          mappingHtml += `<table><thead><tr>${headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>`;
-          sampleRows.forEach(r=>{
-            mappingHtml += `<tr>${headers.map(h=>`<td>${escapeHtml(String(r[h]||''))}</td>`).join('')}</tr>`;
-          });
-          mappingHtml += `</tbody></table></div>`;
-
-          mappingHtml += `<div style="margin-top:8px;">`;
-          headers.forEach(h=>{
-            mappingHtml += `<div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
-              <div style="min-width:160px;"><strong>${escapeHtml(h)}</strong></div>
-              <div style="flex:1;">
-                <select data-col="${escapeHtml(h)}" class="col-map">
-                  ${possibleFields.map(p=>`<option value="${p}" ${autoMap[h]===p ? 'selected' : ''}>${p}</option>`).join('')}
+              <div>
+                <label>Location</label>
+                <select id="m_location">
+                  <option value="">— Select location —</option>
+                  <option value="Upstairs" ${prefill.location==='Upstairs' ? 'selected' : ''}>Upstairs</option>
+                  <option value="Living Room" ${prefill.location==='Living Room' ? 'selected' : ''}>Living Room</option>
+                  <option value="Kitchen" ${prefill.location==='Kitchen' ? 'selected' : ''}>Kitchen</option>
+                  <option value="Parents Room" ${prefill.location==='Parents Room' ? 'selected' : ''}>Parent's Room</option>
+                  <option value="Jaelles Room" ${prefill.location==='Jaelles Room' ? 'selected' : ''}>Jaelle's Room</option>
                 </select>
               </div>
-            </div>`;
-          });
-          mappingHtml += `</div>`;
 
-          mappingHtml += `<div class="small" style="margin-top:8px">Duplicates are detected by ISBN if present.</div>`;
+              <div style="margin-top:8px;">
+                <label>Description</label>
+                <textarea id="m_description">${escapeHtml(prefill.description||'')}</textarea>
+              </div>
 
-          previewArea.innerHTML = mappingHtml;
-          confirmBtn.disabled = false;
-
-          // ensure the action row is visible and focusable
-          confirmBtn.scrollIntoView({behavior:'smooth', block:'nearest'});
-          confirmBtn.focus();
-
-          confirmBtn.onclick = ()=>{
-            const selects = previewArea.querySelectorAll('.col-map');
-            const map = {};
-            selects.forEach(s => map[s.dataset.col] = s.value);
-            const toImport = parsedRows.map(row=>{
-              const obj = {};
-              for(const col of headers){
-                const target = map[col];
-                if(!target || target==='ignore') continue;
-                obj[target] = (row[col]||'').toString();
-              }
-              return obj;
-            });
-            // dedupe by ISBN
-            let added = 0, skipped = 0;
-            toImport.forEach(item=>{
-              const isbn = (item.isbn||'').trim();
-              if(isbn){
-                const exists = books.some(b => b.isbn && b.isbn.trim() === isbn);
-                if(exists){ skipped++; return; }
-              }
-              addBook(item);
-              added++;
-            });
-            alert(`Imported ${added} rows. Skipped ${skipped} duplicates.`);
+              <div class="footer">
+                <div class="small">Fields saved locally in your browser.</div>
+                <div>
+                  <button class="btn secondary" id="cancelModal">Cancel</button>
+                  <button class="btn" id="saveModal">${prefill.id ? 'Save changes' : 'Add book'}</button>
+                </div>
+              </div>
+            </div>
+          `;
+          const modal = openModal(html);
+          modal.querySelector('#cancelModal').addEventListener('click', closeModal);
+          modal.querySelector('#saveModal').addEventListener('click', ()=>{
+            const data = {
+              title: modal.querySelector('#m_title').value.trim(),
+              quantity: modal.querySelector('#m_quantity').value.trim(),
+              authors: modal.querySelector('#m_authors').value.trim(),
+              isbn: modal.querySelector('#m_isbn').value.trim(),
+              publisher: modal.querySelector('#m_publisher').value.trim(),
+              published: modal.querySelector('#m_published').value,
+              pages: modal.querySelector('#m_pages').value.trim(),
+              language: modal.querySelector('#m_language').value.trim(),
+              location: modal.querySelector('#m_location').value.trim(),
+              description: modal.querySelector('#m_description').value.trim()
+            };
+            if(prefill.id){
+              updateBook(prefill.id, data);
+            }else{
+              addBook(data);
+            }
             closeModal();
-          };
-
-        }catch(err){
-          console.error(err);
-          previewArea.innerHTML = `<div class="small">Error parsing file: ${escapeHtml(err.message||String(err))}</div>`;
-          confirmBtn.disabled = true;
+          });
         }
-      });
-    }
 
-    /* ======= Parsing helpers ======= */
-    function normalizeObject(obj){
-      const out = {};
-      for(const k of Object.keys(obj||{})){
-        out[k] = obj[k];
-      }
-      return out;
-    }
-
-    function parseCSV(text){
-      const lines = text.split(/\r?\n/).filter(Boolean);
-      if(lines.length===0) return {rows:[], hdrs:[]};
-      const hdr = parseCSVLine(lines[0]);
-      const rows = [];
-      for(let i=1;i<lines.length;i++){
-        const row = parseCSVLine(lines[i]);
-        if (row.length === 0) continue;
-        const obj = {};
-        for(let j=0;j<hdr.length;j++){
-          obj[hdr[j]] = row[j] !== undefined ? row[j] : '';
+        function openEditModal(id){
+          const b = books.find(x=>x.id===id);
+          if(!b) return;
+          openAddModal(b);
         }
-        rows.push(obj);
-      }
-      return {rows, hdrs:hdr};
-    }
-    function parseCSVLine(line){
-      const out = [];
-      let cur = '', inQuotes=false;
-      for(let i=0;i<line.length;i++){
-        const ch = line[i];
-        if(ch === '"' ){
-          if(inQuotes && line[i+1] === '"'){ cur += '"'; i++; continue; }
-          inQuotes = !inQuotes;
-          continue;
-        }
-        if(ch === ',' && !inQuotes){ out.push(cur); cur=''; continue; }
-        cur += ch;
-      }
-      out.push(cur);
-      return out;
-    }
 
-    function parseXML(text){
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'application/xml');
-      const parseError = doc.querySelector('parsererror');
-      if(parseError) throw new Error('Invalid XML');
-      const root = doc.documentElement;
-      let items = [];
-      const candidates = ['record','item','row','book','entry'];
-      for(const c of candidates){
-        const nodes = root.querySelectorAll(c);
-        if(nodes.length>0){ items = Array.from(nodes); break; }
-      }
-      if(items.length===0) items = Array.from(root.children);
-      const rows = items.map(node=>{
-        const obj = {};
-        Array.from(node.children).forEach(ch=>{
-          obj[ch.nodeName] = ch.textContent || '';
-        });
-        return obj;
-      });
-      const hdrs = [...new Set(rows.flatMap(r=>Object.keys(r)))];
-      return {rows, hdrs};
-    }
+        /* ======= Book detail modal + checkout logic ======= */
+        function openDetailModal(id){
+          const b = books.find(x=>x.id===id);
+          if(!b) return;
+          const checked = b.checkedOut ? true : false;
+          const checkedBy = checked ? escapeHtml(b.checkedOut.byName || '') : '';
+          const checkedEmail = checked ? escapeHtml(b.checkedOut.byEmail || '') : '';
+          const html = `
+            <h3>Book Details</h3>
 
-    function parseHTMLTable(text){
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/html');
-      const table = doc.querySelector('table');
-      if(!table) return {rows:[], hdrs:[]};
-      const hdrs = Array.from(table.querySelectorAll('thead th')).map(th=>th.textContent.trim());
-      if(hdrs.length===0){
-        const firstRow = table.querySelector('tr');
-        if(firstRow){
-          hdrs.push(...Array.from(firstRow.querySelectorAll('td,th')).map(td=>td.textContent.trim()));
-        }
-      }
-      const rows = [];
-      const trs = table.querySelectorAll('tbody tr');
-      const useTrs = trs.length ? trs : table.querySelectorAll('tr');
-      useTrs.forEach((tr, idx)=>{
-        if(idx===0 && hdrs.length && tr.querySelectorAll('th').length) return;
-        const cells = Array.from(tr.querySelectorAll('td,th')).map(td=>td.textContent.trim());
-        if(cells.length===0) return;
-        const obj = {};
-        for(let i=0;i<hdrs.length;i++){
-          obj[hdrs[i]||`col${i+1}`] = cells[i] || '';
-        }
-        rows.push(obj);
-      });
-      return {rows, hdrs};
-    }
+              <div style="display:flex; gap:16px; margin-top:8px;">
 
-    function autoMapHeaders(headers){
-      const map = {};
-      headers.forEach(h=>{
-        const trimmed = h.trim();
-        const key = trimmed.toLowerCase();
-        if(/^id$/.test(key)) map[trimmed]='id';
-        else if(/^(checkedoutbyname|checked_out_by_name)$/.test(key)) map[trimmed]='checkedOutByName';
-        else if(/^(checkedoutbyemail|checked_out_by_email)$/.test(key)) map[trimmed]='checkedOutByEmail';
-        else if(/^(checkedoutdate|checked_out_date)$/.test(key)) map[trimmed]='checkedOutDate';
-        else if(/^isbn$/.test(key)) map[trimmed]='isbn';
-        else if(/^title$/.test(key)) map[trimmed]='title';
-        else if(/^(quantity|qty|count)$/.test(key)) map[trimmed]='quantity';
-        else if(/^(desc|description|notes)$/.test(key)) map[trimmed]='description';
-        else if(/^(author|authors)$/.test(key)) map[trimmed]='authors';
-        else if(/^publisher$/.test(key)) map[trimmed]='publisher';
-        else if(/^(published|publishdate|publish_date)$/.test(key)) map[trimmed]='published';
-        else if(/^(page|pages)$/.test(key)) map[trimmed]='pages';
-        else if(/^(lang|language)$/.test(key)) map[trimmed]='language';
-        else if(/^(location|shelf|place)$/.test(key)) map[trimmed]='location';
-        else map[trimmed]='ignore';
-      });
-      console.log('Header mapping:', map);
-      return map;
-    }
+                <div style="flex:0 0 150px;">
+                  <img src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg" onerror="this.onerror=null; this.src='No Image Available.png';" style="width:100%; max-width:150px; border-radius:6px;">
+                </div>
 
-    function normalizeBookData(rows, hdrs){
-      // Apply header mapping to normalize field names
-      const headerMap = autoMapHeaders(hdrs);
-      return rows.map(row => {
-        const normalized = {};
-        for (const [originalHeader, value] of Object.entries(row)) {
-          const mappedField = headerMap[originalHeader];
-          if (mappedField && mappedField !== 'ignore') {
-            normalized[mappedField] = value;
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:18px;">${escapeHtml(b.title||'Untitled')}</div>
+              <div class="small">${escapeHtml(b.authors||'—')}</div>
+              <div style="margin-top:8px;">${escapeHtml(b.description||'')}</div>
+            <div style="margin-top:12px;">
+              <div class="small">ISBN: <strong>${escapeHtml(b.isbn||'—')}</strong></div>
+              <div class="small">Publisher: ${escapeHtml(b.publisher||'—')}</div>
+              <div class="small">Published: ${escapeHtml(b.published||'—')}</div>
+              <div class="small">Pages: ${escapeHtml(b.pages||'—')}</div>
+              <div class="small">Language: ${escapeHtml(b.language||'—')}</div>
+              <div class="small">Location: ${escapeHtml(b.location||'—')}</div>
+              <div class="small">Quantity: ${escapeHtml(String(b.quantity||1))}</div>
+              <div style="margin-top:8px;">${checked ? `<div class="small">Checked out by <span class="user-badge">${checkedBy}</span></div>` : `<div class="small">Available</div>`}</div>
+            </div>
+              <div style="margin-top:16px; display:flex; gap:8px; justify-content:flex-end;">
+                ${checked 
+                  ? (currentUser && currentUser.name === b.checkedOut.byName 
+                      ? `<button class="btn" id="returnBtn">Return book</button>` 
+                      : `<button class="btn secondary" id="requestBtn">Request book</button>`)
+                  : `<button class="btn" id="checkoutBtn">Check out</button>`}
+                <button class="btn secondary" id="closeDetail">Close</button>
+              </div>
+              </div>
+            </div>
+          `;
+          const modal = openModal(html);
+          modal.querySelector('#closeDetail').addEventListener('click', closeModal);
+
+          if(!checked){
+            modal.querySelector('#checkoutBtn').addEventListener('click', ()=>{
+              // if signed in, use user; otherwise prompt for name (and optional email)
+              if(currentUser && currentUser.name){
+                performCheckout(b.id, currentUser.name, currentUser.email || '');
+                closeModal();
+              } else {
+                openQuickCheckoutModal(b.id);
+              }
+            });
+          } else {
+            if(currentUser && currentUser.name === b.checkedOut.byName){
+              modal.querySelector('#returnBtn').addEventListener('click', ()=>{
+                if(!confirm('Mark this book as returned?')) return;
+                performReturn(b.id);
+                closeModal();
+              });
+            } else {
+              modal.querySelector('#requestBtn').addEventListener('click', ()=>{
+                // open request flow: if checkedOut.byEmail exists, open mailto; otherwise show message
+                if(b.checkedOut && b.checkedOut.byEmail){
+                  const requesterName = currentUser && currentUser.name ? currentUser.name : prompt('Your name (for the request):') || 'Someone';
+                  const requesterEmail = currentUser && currentUser.email ? currentUser.email : prompt('Your email (optional):') || '';
+                  const subject = `Request for book: ${b.title}`;
+                  const body = `Hello ${b.checkedOut.byName || ''},
+
+        This is a book request from ${requesterName}${requesterEmail ? ` (${requesterEmail})` : ''} requesting the book "${b.title}" (ISBN: ${b.isbn || '—'}). Please respond to this email if you are able to return it or coordinate a pickup time.
+
+        Thanks,
+        The Alaniz Library`;
+                  // open mailto link
+                  const mailto = `mailto:${encodeURIComponent(b.checkedOut.byEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                  window.open(mailto, '_blank');
+                } else {
+                  alert('No email is available for the person who checked this out.');
+                }
+              });
+            }
           }
         }
-        // Ensure each book has an ID (preserve existing or generate new)
-        if (!normalized.id) {
-          normalized.id = uid();
-        }
-        // Convert checkout fields to checkedOut object format
-        return convertCheckoutFields(normalized);
-      });
-    }
 
-    /* ======= Utilities ======= */
-    function convertCheckoutFields(book) {
-      // Convert checkout fields to checkedOut object format
-      if (book.checkedOutByName || book.checkedOutByEmail || book.checkedOutDate) {
-        const result = { ...book };
-        result.checkedOut = {
-          byName: book.checkedOutByName || '',
-          byEmail: book.checkedOutByEmail || '',
-          date: book.checkedOutDate || ''
-        };
-        // Remove the individual fields
-        delete result.checkedOutByName;
-        delete result.checkedOutByEmail;
-        delete result.checkedOutDate;
-        return result;
-      }
-      return book;
-    }
-    
-    function escapeHtml(s){
-      if(s===null || s===undefined) return '';
-      return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
-    }
-
-    function downloadBlob(blob, filename){
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function toCSV(arr){
-      if(!arr || arr.length===0) return '';
-      const keys = ['isbn','title','quantity','description','authors','publisher','published','pages','language','location','added'];
-      const hdr = keys.join(',');
-      const lines = arr.map(o => keys.map(k => csvEscape(o[k]||'')).join(','));
-      return hdr + '\n' + lines.join('\n');
-    }
-    function csvEscape(v){
-      const s = String(v).replaceAll('"','""');
-      if(s.includes(',') || s.includes('"') || s.includes('\n')) return `"${s}"`;
-      return s;
-    }
-
-    /* ======= Search & filters events ======= */
-    [searchInput, langFilter, locFilter, sortSelect].forEach(el=>{
-      el.addEventListener('input', debounce(render, 180));
-    });
-
-    /* ======= Utilities: debounce ======= */
-    function debounce(fn, wait=200){
-      let t;
-      return function(...args){
-        clearTimeout(t);
-        t = setTimeout(()=>fn.apply(this,args), wait);
-      };
-    }
-
-    /* ======= Init (safe) ======= */
-    try{
-      console.log('Library script loaded — DOM ready:', !!document.getElementById('exportBtn'));
-      render();
-    }catch(err){
-      console.error('Initialization error', err);
-      alert('An error occurred during startup. See console for details.');
-    }
-
-    /* ======= Fetching data from Google Sheets ======= */
-    async function fetchBooksFromGoogleSheet(sheetUrl) {
-      if (!sheetUrl || sheetUrl.trim() === '') {
-        console.log('No Google Sheets URL configured. Using local storage only.');
-        return;
-      }
-
-      try {
-        console.log('Syncing with Google Sheets...');
-
-        const booksData = await new Promise((resolve, reject) => {
-          const callbackName = 'gsCallback_' + Date.now();
-          const script = document.createElement('script');
-
-          window[callbackName] = function(data) {
-            delete window[callbackName];
-            script.remove();
-            resolve(data);
-          };
-
-          script.onerror = () => reject(new Error('Script load failed'));
-          script.src = sheetUrl + '?callback=' + callbackName + '&_=' + Date.now();
-          document.head.appendChild(script);
-
-          setTimeout(() => reject(new Error('Timeout')), 10000);
-        });
-
-        if (!booksData || booksData.length === 0) {
-          console.warn('Google Sheets returned no data');
-          return;
+        /* Quick checkout modal when not signed in */
+        function openQuickCheckoutModal(bookId){
+          const html = `
+            <h3>Check out book</h3>
+            <div style="margin-top:8px;">
+              <div class="small">Enter your name (required) and email (optional).</div>
+              <div style="margin-top:8px;">
+                <label>Name</label>
+                <input id="co_name" type="text" />
+              </div>
+              <div style="margin-top:8px;">
+                <label>Email (optional)</label>
+                <input id="co_email" type="text" />
+              </div>
+              <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+                <button class="btn secondary" id="cancelCo">Cancel</button>
+                <button class="btn" id="confirmCo">Check out</button>
+              </div>
+            </div>
+          `;
+          const modal = openModal(html);
+          modal.querySelector('#cancelCo').addEventListener('click', closeModal);
+          modal.querySelector('#confirmCo').addEventListener('click', ()=>{
+            const name = modal.querySelector('#co_name').value.trim();
+            const email = modal.querySelector('#co_email').value.trim();
+            if(!name){
+              alert('Please enter your name to check out the book.');
+              return;
+            }
+            // optionally save as current user
+            if(confirm('Save this name and email as your sign-in for future actions?')){
+              currentUser = { name, email };
+              saveUser(currentUser);
+            }
+            performCheckout(bookId, name, email);
+            closeModal();
+          });
         }
 
-        const headers = Object.keys(booksData[0]);
-        books = normalizeBookData(booksData, headers);
-        saveBooks(books);
-        render();
-
-        console.log(`✓ Successfully synced ${books.length} books from Google Sheets`);
-      } catch (error) {
-        console.warn('Could not sync with Google Sheets:', error.message);
-        console.log('Using locally cached data.');
-      }
-    }
-
-    /* Write checkout/return data to Google Sheets */
-    async function writeCheckoutToSheet(bookId, action, byName, byEmail, date) {
-      if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.trim() === '') return;
-
-      try {
-        const params = new URLSearchParams({
-          action: action,
-          id: bookId,
-          byName: byName || '',
-          byEmail: byEmail || '',
-          date: date || ''
-        });
-
-        await new Promise((resolve, reject) => {
-          const callbackName = 'gsWriteCallback_' + Date.now();
-          const script = document.createElement('script');
-
-          window[callbackName] = function(response) {
-            delete window[callbackName];
-            script.remove();
-            resolve(response);
+        /* perform checkout and return */
+        function performCheckout(bookId, byName, byEmail){
+          const idx = books.findIndex(b => b.id === bookId);
+          if(idx === -1) return;
+          books[idx].checkedOut = {
+            byName: byName,
+            byEmail: byEmail || '',
+            date: new Date().toISOString()
           };
+          saveBooks(books);
+          render();
+          // Sync to Google Sheets
+          writeCheckoutToSheet(bookId, 'checkout', byName, byEmail, books[idx].checkedOut.date);
+        }
 
-          script.onerror = () => reject(new Error('Write failed'));
-          script.src = GOOGLE_SHEET_URL + '?' + params.toString() + '&callback=' + callbackName;
-          document.head.appendChild(script);
+        function performReturn(bookId){
+          const idx = books.findIndex(b => b.id === bookId);
+          if(idx === -1) return;
+          books[idx].checkedOut = null;
+          saveBooks(books);
+          render();
+          // Sync to Google Sheets
+          writeCheckoutToSheet(bookId, 'return', '', '', '');
+        }
 
-          setTimeout(() => reject(new Error('Write timeout')), 10000);
+        /* ======= My Books modal ======= */
+        document.getElementById('myBooksBtn').addEventListener('click', ()=>{
+          openMyBooksModal();
         });
 
-        console.log(`✓ Sent ${action} update to Google Sheets for book ${bookId}`);
-      } catch (error) {
-        console.warn(`Could not write ${action} to Google Sheets:`, error.message);
-      }
-    }
+        function openMyBooksModal(){
+          if(!currentUser || !currentUser.name) return;
 
-    // ====================================================================
-    // GOOGLE SHEETS CONFIGURATION
-    // ====================================================================
-    // Set your Google Sheets URL here. Three options:
-    //
-    // Option 1 (RECOMMENDED): Google Apps Script web app URL
-    //   - No CORS issues, works reliably
-    //   - See GOOGLE_SHEETS_SETUP.md for detailed setup instructions
-    //   - Example: 'https://script.google.com/macros/s/ABC123.../exec'
-    //
-    // Option 2: Published CSV URL
-    //   - Simpler but may have CORS issues in some browsers
-    //   - Example: 'https://docs.google.com/.../pub?gid=...&output=csv'
-    //
-    // Option 3: No sync (localStorage only)
-    //   - Set to empty string: ''
-    //   - App works entirely offline
-    //
-    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzYUk_o1WTc1whhn0Y6FqzONenaIjuSUon3pvWXDSC2BMboLnoXncjLg0JCEZTYNac0/exec';
-    // ====================================================================
-    
-    // Fetch data from Google Sheets in the background (app already loaded from localStorage)
-    fetchBooksFromGoogleSheet(GOOGLE_SHEET_URL);
-    </script>
+          const myBooks = books.filter(b => b.checkedOut && b.checkedOut.byName === currentUser.name);
+
+          const bookRows = myBooks.length === 0
+            ? `<div class="empty"><strong>You have no books checked out.</strong></div>`
+            : myBooks.map(b => {
+                const checkoutDate = b.checkedOut.date
+                  ? new Date(b.checkedOut.date).toLocaleDateString()
+                  : '—';
+                const pages = b.pages ? `<span class="pill">${escapeHtml(b.pages)}p</span>` : '';
+                const lang = b.language ? `<span class="tag">${escapeHtml(b.language)}</span>` : '';
+                const pub = b.published ? `<div class="small">Published: ${escapeHtml(b.published)}</div>` : '';
+                const publisher = b.publisher ? `<div class="small">Publisher: ${escapeHtml(b.publisher)}</div>` : '';
+                const location = b.location ? `<div class="small">Location: ${escapeHtml(b.location)}</div>` : '';
+                return `
+                  <div style="display:flex; gap:16px; align-items:flex-start; padding:12px 0;" data-bookid="${escapeHtml(b.id)}">
+                    <div style="flex:0 0 80px;">
+                      <img
+                        src="https://covers.openlibrary.org/b/isbn/${escapeHtml(b.isbn||'-')}-M.jpg"
+                        onerror="this.onerror=null; this.style.background='rgba(255,255,255,0.05)'; this.style.minHeight='80px'; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22140%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23162032%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%239aa4b2%22 font-size=%2211%22>No cover</text></svg>';"
+                        style="width:100%; height:110px; object-fit:cover; border-radius:6px;">
+                    </div>
+                    <div style="flex:1;">
+                      <div style="font-weight:700; font-size:15px;">${escapeHtml(b.title||'Untitled')}</div>
+                      <div class="small">${escapeHtml(b.authors||'—')}</div>
+                      <div style="margin-top:6px;">${lang} ${pages}</div>
+                      ${pub}
+                      ${publisher}
+                      <div class="small">ISBN: ${escapeHtml(b.isbn||'—')}</div>
+                      ${location}
+                      <div class="small" style="margin-top:4px; color:var(--accent)">Checked out: ${checkoutDate}</div>
+                    </div>
+                    <div style="display:flex; align-items:center;">
+                      <button class="btn" style="white-space:nowrap;" data-returnid="${escapeHtml(b.id)}">Return</button>
+                    </div>
+                  </div>
+                `;
+              }).join('<hr style="border:none; border-top:1px solid var(--border);">');
+
+          const html = `
+            <h3>My Checked Out Books</h3>
+            <div class="small" style="margin-bottom:12px;">Signed in as <strong>${escapeHtml(currentUser.name)}</strong> · ${myBooks.length} book${myBooks.length !== 1 ? 's' : ''} checked out</div>
+            <div>${bookRows}</div>
+            <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+              <button class="btn secondary" id="closeMyBooks">Close</button>
+            </div>
+          `;
+
+          const modal = openModal(html);
+          modal.querySelector('#closeMyBooks').addEventListener('click', closeModal);
+
+          modal.querySelectorAll('[data-returnid]').forEach(btn => {
+            btn.addEventListener('click', ()=>{
+              const bookId = btn.dataset.returnid;
+              const book = books.find(b => b.id === bookId);
+              if(!book) return;
+              if(!confirm(`Return "${book.title}"?`)) return;
+              performReturn(bookId);
+              closeModal();
+            });
+          });
+        }
+
+        /* ======= Sign-in modal ======= */
+        signinBtn.addEventListener('click', ()=>{
+          openSignInModal();
+        });
+        function openSignInModal(){
+          const html = `
+            <h3>Sign in</h3>
+            <div style="margin-top:8px;">
+              <div class="small">Enter your name and email. This will be used to auto-fill checkouts.</div>
+              <div style="margin-top:8px;">
+                <label>Name</label>
+                <input id="si_name" type="text" value="${escapeHtml(currentUser && currentUser.name || '')}" />
+              </div>
+              <div style="margin-top:8px;">
+                <label>Email</label>
+                <input id="si_email" type="text" value="${escapeHtml(currentUser && currentUser.email || '')}" />
+              </div>
+              <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+                <button class="btn ghost" id="signoutBtn">${currentUser ? 'Sign out' : 'Cancel'}</button>
+                <button class="btn" id="saveSignIn">Save</button>
+              </div>
+            </div>
+          `;
+          const modal = openModal(html);
+          modal.querySelector('#saveSignIn').addEventListener('click', ()=>{
+            const name = modal.querySelector('#si_name').value.trim();
+            const email = modal.querySelector('#si_email').value.trim();
+            if(!name){
+              alert('Please enter a name.');
+              return;
+            }
+            currentUser = { name, email };
+            saveUser(currentUser);
+            closeModal();
+            render();
+          });
+          modal.querySelector('#signoutBtn').addEventListener('click', ()=>{
+            if(currentUser){
+              if(confirm('Sign out and clear saved name/email?')){
+                currentUser = null;
+                localStorage.removeItem(USER_KEY);
+                closeModal();
+                render();
+              }
+            } else {
+              closeModal();
+            }
+          });
+        }
+
+        /* ======= Import / Export (with mapping) ======= */
+        /* The import/export code is the same as before (keeps XLSX lazy-loading fallback) */
+        document.getElementById('exportBtn').addEventListener('click', ()=> openExportOptions());
+
+        function openExportOptions(){
+          const html = `
+            <h3>Export library</h3>
+            <div style="margin-top:8px;">
+              <div class="small">Choose an export format. Files are downloaded locally.</div>
+              <div style="margin-top:12px; display:flex; gap:8px;">
+                <button class="btn" id="exportJson">Export JSON</button>
+                <button class="btn" id="exportCsv">Export CSV</button>
+                <button class="btn secondary" id="closeExport">Close</button>
+              </div>
+            </div>
+          `;
+          const modal = openModal(html);
+          modal.querySelector('#closeExport').addEventListener('click', closeModal);
+          modal.querySelector('#exportJson').addEventListener('click', ()=>{
+            const blob = new Blob([JSON.stringify(books, null, 2)], {type:'application/json'});
+            downloadBlob(blob, `library-${new Date().toISOString().slice(0,10)}.json`);
+          });
+          modal.querySelector('#exportCsv').addEventListener('click', ()=>{
+            const csv = toCSV(books);
+            const blob = new Blob([csv], {type:'text/csv'});
+            downloadBlob(blob, `library-${new Date().toISOString().slice(0,10)}.csv`);
+          });
+        }
+
+        /* Lazy-load XLSX only when needed */
+        function loadXLSX(){
+          if(window.XLSX) return Promise.resolve(window.XLSX);
+          return new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = './libs/xlsx.full.min.js';
+            s.onerror = () => {
+              s.remove();
+              const s2 = document.createElement('script');
+              s2.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+              s2.onload = () => resolve(window.XLSX);
+              s2.onerror = (e) => reject(new Error('Failed to load XLSX library'));
+              document.head.appendChild(s2);
+            };
+            s.onload = () => resolve(window.XLSX);
+            document.head.appendChild(s);
+          });
+        }
+
+        function openImportModal(){
+          const html = `
+            <h3>Import file</h3>
+            <div style="margin-top:8px; display:flex; flex-direction:column; gap:12px;">
+              <div class="small">Supported: CSV, JSON, XML, HTML (table), XLSX</div>
+              <div>
+                <input id="importFile" type="file" accept=".csv,.json,.xml,.html,.htm,.xlsx" />
+              </div>
+              <div id="importPreviewArea" style="margin-top:0;"></div>
+
+              <!-- sticky action row -->
+              <div class="import-actions">
+                <button class="btn secondary" id="cancelImport">Cancel</button>
+                <button class="btn" id="confirmImport" disabled>Import</button>
+              </div>
+            </div>
+          `;
+          const modal = openModal(html);
+          const fileInput = modal.querySelector('#importFile');
+          const previewArea = modal.querySelector('#importPreviewArea');
+          const confirmBtn = modal.querySelector('#confirmImport');
+          modal.querySelector('#cancelImport').addEventListener('click', closeModal);
+
+          let parsedRows = [];
+          let headers = [];
+
+          fileInput.addEventListener('change', async (e)=>{
+            const f = e.target.files[0];
+            if(!f) return;
+            const name = f.name.toLowerCase();
+            previewArea.innerHTML = `<div class="small">Parsing ${escapeHtml(f.name)}…</div>`;
+            confirmBtn.disabled = true;
+            try{
+              if(name.endsWith('.json')){
+                const text = await f.text();
+                const data = JSON.parse(text);
+                const arr = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : Object.values(data));
+                parsedRows = arr.map(obj => normalizeObject(obj));
+                headers = Object.keys(parsedRows[0]||{});
+              } else if(name.endsWith('.csv')){
+                const text = await f.text();
+                const {rows, hdrs} = parseCSV(text);
+                parsedRows = rows;
+                headers = hdrs;
+              } else if(name.endsWith('.xml')){
+                const text = await f.text();
+                const {rows, hdrs} = parseXML(text);
+                parsedRows = rows;
+                headers = hdrs;
+              } else if(name.endsWith('.html') || name.endsWith('.htm')){
+                const text = await f.text();
+                const {rows, hdrs} = parseHTMLTable(text);
+                parsedRows = rows;
+                headers = hdrs;
+              } else if(name.endsWith('.xlsx')){
+                try{
+                  await loadXLSX();
+                }catch(err){
+                  previewArea.innerHTML = `<div class="small">Could not load XLSX support: ${escapeHtml(err.message)}</div>`;
+                  console.error(err);
+                  return;
+                }
+                const arrayBuffer = await f.arrayBuffer();
+                const wb = XLSX.read(arrayBuffer, {type:'array'});
+                const first = wb.SheetNames[0];
+                const sheet = wb.Sheets[first];
+                const json = XLSX.utils.sheet_to_json(sheet, {defval:''});
+                parsedRows = json.map(obj => normalizeObject(obj));
+                headers = Object.keys(parsedRows[0]||{});
+              } else {
+                previewArea.innerHTML = `<div class="small">Unsupported file type.</div>`;
+                return;
+              }
+
+              if(parsedRows.length === 0){
+                previewArea.innerHTML = `<div class="small">No rows found in file.</div>`;
+                return;
+              }
+
+              // Build mapping UI
+              const sampleRows = parsedRows.slice(0,6);
+              const possibleFields = ['ignore','isbn','title','quantity','description','authors','publisher','published','pages','language','location'];
+              const autoMap = autoMapHeaders(headers);
+
+              let mappingHtml = `<div class="small">Preview (${parsedRows.length} rows). Map columns to fields:</div>`;
+              mappingHtml += `<div class="import-preview" style="margin-top:8px;">`;
+              mappingHtml += `<table><thead><tr>${headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>`;
+              sampleRows.forEach(r=>{
+                mappingHtml += `<tr>${headers.map(h=>`<td>${escapeHtml(String(r[h]||''))}</td>`).join('')}</tr>`;
+              });
+              mappingHtml += `</tbody></table></div>`;
+
+              mappingHtml += `<div style="margin-top:8px;">`;
+              headers.forEach(h=>{
+                mappingHtml += `<div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+                  <div style="min-width:160px;"><strong>${escapeHtml(h)}</strong></div>
+                  <div style="flex:1;">
+                    <select data-col="${escapeHtml(h)}" class="col-map">
+                      ${possibleFields.map(p=>`<option value="${p}" ${autoMap[h]===p ? 'selected' : ''}>${p}</option>`).join('')}
+                    </select>
+                  </div>
+                </div>`;
+              });
+              mappingHtml += `</div>`;
+
+              mappingHtml += `<div class="small" style="margin-top:8px">Duplicates are detected by ISBN if present.</div>`;
+
+              previewArea.innerHTML = mappingHtml;
+              confirmBtn.disabled = false;
+
+              // ensure the action row is visible and focusable
+              confirmBtn.scrollIntoView({behavior:'smooth', block:'nearest'});
+              confirmBtn.focus();
+
+              confirmBtn.onclick = ()=>{
+                const selects = previewArea.querySelectorAll('.col-map');
+                const map = {};
+                selects.forEach(s => map[s.dataset.col] = s.value);
+                const toImport = parsedRows.map(row=>{
+                  const obj = {};
+                  for(const col of headers){
+                    const target = map[col];
+                    if(!target || target==='ignore') continue;
+                    obj[target] = (row[col]||'').toString();
+                  }
+                  return obj;
+                });
+                // dedupe by ISBN
+                let added = 0, skipped = 0;
+                toImport.forEach(item=>{
+                  const isbn = (item.isbn||'').trim();
+                  if(isbn){
+                    const exists = books.some(b => b.isbn && b.isbn.trim() === isbn);
+                    if(exists){ skipped++; return; }
+                  }
+                  addBook(item);
+                  added++;
+                });
+                alert(`Imported ${added} rows. Skipped ${skipped} duplicates.`);
+                closeModal();
+              };
+
+            }catch(err){
+              console.error(err);
+              previewArea.innerHTML = `<div class="small">Error parsing file: ${escapeHtml(err.message||String(err))}</div>`;
+              confirmBtn.disabled = true;
+            }
+          });
+        }
+
+        /* ======= Parsing helpers ======= */
+        function normalizeObject(obj){
+          const out = {};
+          for(const k of Object.keys(obj||{})){
+            out[k] = obj[k];
+          }
+          return out;
+        }
+
+        function parseCSV(text){
+          const lines = text.split(/\r?\n/).filter(Boolean);
+          if(lines.length===0) return {rows:[], hdrs:[]};
+          const hdr = parseCSVLine(lines[0]);
+          const rows = [];
+          for(let i=1;i<lines.length;i++){
+            const row = parseCSVLine(lines[i]);
+            if (row.length === 0) continue;
+            const obj = {};
+            for(let j=0;j<hdr.length;j++){
+              obj[hdr[j]] = row[j] !== undefined ? row[j] : '';
+            }
+            rows.push(obj);
+          }
+          return {rows, hdrs:hdr};
+        }
+        function parseCSVLine(line){
+          const out = [];
+          let cur = '', inQuotes=false;
+          for(let i=0;i<line.length;i++){
+            const ch = line[i];
+            if(ch === '"' ){
+              if(inQuotes && line[i+1] === '"'){ cur += '"'; i++; continue; }
+              inQuotes = !inQuotes;
+              continue;
+            }
+            if(ch === ',' && !inQuotes){ out.push(cur); cur=''; continue; }
+            cur += ch;
+          }
+          out.push(cur);
+          return out;
+        }
+
+        function parseXML(text){
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(text, 'application/xml');
+          const parseError = doc.querySelector('parsererror');
+          if(parseError) throw new Error('Invalid XML');
+          const root = doc.documentElement;
+          let items = [];
+          const candidates = ['record','item','row','book','entry'];
+          for(const c of candidates){
+            const nodes = root.querySelectorAll(c);
+            if(nodes.length>0){ items = Array.from(nodes); break; }
+          }
+          if(items.length===0) items = Array.from(root.children);
+          const rows = items.map(node=>{
+            const obj = {};
+            Array.from(node.children).forEach(ch=>{
+              obj[ch.nodeName] = ch.textContent || '';
+            });
+            return obj;
+          });
+          const hdrs = [...new Set(rows.flatMap(r=>Object.keys(r)))];
+          return {rows, hdrs};
+        }
+
+        function parseHTMLTable(text){
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(text, 'text/html');
+          const table = doc.querySelector('table');
+          if(!table) return {rows:[], hdrs:[]};
+          const hdrs = Array.from(table.querySelectorAll('thead th')).map(th=>th.textContent.trim());
+          if(hdrs.length===0){
+            const firstRow = table.querySelector('tr');
+            if(firstRow){
+              hdrs.push(...Array.from(firstRow.querySelectorAll('td,th')).map(td=>td.textContent.trim()));
+            }
+          }
+          const rows = [];
+          const trs = table.querySelectorAll('tbody tr');
+          const useTrs = trs.length ? trs : table.querySelectorAll('tr');
+          useTrs.forEach((tr, idx)=>{
+            if(idx===0 && hdrs.length && tr.querySelectorAll('th').length) return;
+            const cells = Array.from(tr.querySelectorAll('td,th')).map(td=>td.textContent.trim());
+            if(cells.length===0) return;
+            const obj = {};
+            for(let i=0;i<hdrs.length;i++){
+              obj[hdrs[i]||`col${i+1}`] = cells[i] || '';
+            }
+            rows.push(obj);
+          });
+          return {rows, hdrs};
+        }
+
+        function autoMapHeaders(headers){
+          const map = {};
+          headers.forEach(h=>{
+            const trimmed = h.trim();
+            const key = trimmed.toLowerCase();
+            if(/^id$/.test(key)) map[trimmed]='id';
+            else if(/^(checkedoutbyname|checked_out_by_name)$/.test(key)) map[trimmed]='checkedOutByName';
+            else if(/^(checkedoutbyemail|checked_out_by_email)$/.test(key)) map[trimmed]='checkedOutByEmail';
+            else if(/^(checkedoutdate|checked_out_date)$/.test(key)) map[trimmed]='checkedOutDate';
+            else if(/^isbn$/.test(key)) map[trimmed]='isbn';
+            else if(/^title$/.test(key)) map[trimmed]='title';
+            else if(/^(quantity|qty|count)$/.test(key)) map[trimmed]='quantity';
+            else if(/^(desc|description|notes)$/.test(key)) map[trimmed]='description';
+            else if(/^(author|authors)$/.test(key)) map[trimmed]='authors';
+            else if(/^publisher$/.test(key)) map[trimmed]='publisher';
+            else if(/^(published|publishdate|publish_date)$/.test(key)) map[trimmed]='published';
+            else if(/^(page|pages)$/.test(key)) map[trimmed]='pages';
+            else if(/^(lang|language)$/.test(key)) map[trimmed]='language';
+            else if(/^(location|shelf|place)$/.test(key)) map[trimmed]='location';
+            else map[trimmed]='ignore';
+          });
+          console.log('Header mapping:', map);
+          return map;
+        }
+
+        function normalizeBookData(rows, hdrs){
+          // Apply header mapping to normalize field names
+          const headerMap = autoMapHeaders(hdrs);
+          return rows.map(row => {
+            const normalized = {};
+            for (const [originalHeader, value] of Object.entries(row)) {
+              const mappedField = headerMap[originalHeader];
+              if (mappedField && mappedField !== 'ignore') {
+                normalized[mappedField] = value;
+              }
+            }
+            // Ensure each book has an ID (preserve existing or generate new)
+            if (!normalized.id) {
+              normalized.id = uid();
+            }
+            // Convert checkout fields to checkedOut object format
+            return convertCheckoutFields(normalized);
+          });
+        }
+
+        /* ======= Utilities ======= */
+        function convertCheckoutFields(book) {
+          // Convert checkout fields to checkedOut object format
+          if (book.checkedOutByName || book.checkedOutByEmail || book.checkedOutDate) {
+            const result = { ...book };
+            result.checkedOut = {
+              byName: book.checkedOutByName || '',
+              byEmail: book.checkedOutByEmail || '',
+              date: book.checkedOutDate || ''
+            };
+            // Remove the individual fields
+            delete result.checkedOutByName;
+            delete result.checkedOutByEmail;
+            delete result.checkedOutDate;
+            return result;
+          }
+          return book;
+        }
+        
+        function escapeHtml(s){
+          if(s===null || s===undefined) return '';
+          return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+        }
+
+        function downloadBlob(blob, filename){
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        }
+
+        function toCSV(arr){
+          if(!arr || arr.length===0) return '';
+          const keys = ['isbn','title','quantity','description','authors','publisher','published','pages','language','location','added'];
+          const hdr = keys.join(',');
+          const lines = arr.map(o => keys.map(k => csvEscape(o[k]||'')).join(','));
+          return hdr + '\n' + lines.join('\n');
+        }
+        function csvEscape(v){
+          const s = String(v).replaceAll('"','""');
+          if(s.includes(',') || s.includes('"') || s.includes('\n')) return `"${s}"`;
+          return s;
+        }
+
+        /* ======= Search & filters events ======= */
+        [searchInput, langFilter, locFilter, sortSelect].forEach(el=>{
+          el.addEventListener('input', debounce(render, 180));
+        });
+
+        /* ======= Utilities: debounce ======= */
+        function debounce(fn, wait=200){
+          let t;
+          return function(...args){
+            clearTimeout(t);
+            t = setTimeout(()=>fn.apply(this,args), wait);
+          };
+        }
+
+        /* ======= Init (safe) ======= */
+        try{
+          console.log('Library script loaded — DOM ready:', !!document.getElementById('exportBtn'));
+          render();
+        }catch(err){
+          console.error('Initialization error', err);
+          alert('An error occurred during startup. See console for details.');
+        }
+
+        /* ======= Fetching data from Google Sheets ======= */
+        async function fetchBooksFromGoogleSheet(sheetUrl) {
+          if (!sheetUrl || sheetUrl.trim() === '') {
+            console.log('No Google Sheets URL configured. Using local storage only.');
+            return;
+          }
+
+          try {
+            console.log('Syncing with Google Sheets...');
+
+            const booksData = await new Promise((resolve, reject) => {
+              const callbackName = 'gsCallback_' + Date.now();
+              const script = document.createElement('script');
+
+              window[callbackName] = function(data) {
+                delete window[callbackName];
+                script.remove();
+                resolve(data);
+              };
+
+              script.onerror = () => reject(new Error('Script load failed'));
+              script.src = sheetUrl + '?callback=' + callbackName + '&_=' + Date.now();
+              document.head.appendChild(script);
+
+              setTimeout(() => reject(new Error('Timeout')), 10000);
+            });
+
+            if (!booksData || booksData.length === 0) {
+              console.warn('Google Sheets returned no data');
+              return;
+            }
+
+            const headers = Object.keys(booksData[0]);
+            books = normalizeBookData(booksData, headers);
+            saveBooks(books);
+            render();
+
+            console.log(`✓ Successfully synced ${books.length} books from Google Sheets`);
+          } catch (error) {
+            console.warn('Could not sync with Google Sheets:', error.message);
+            console.log('Using locally cached data.');
+          }
+        }
+
+        /* Write checkout/return data to Google Sheets */
+        async function writeCheckoutToSheet(bookId, action, byName, byEmail, date) {
+          if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.trim() === '') return;
+
+          try {
+            const params = new URLSearchParams({
+              action: action,
+              id: bookId,
+              byName: byName || '',
+              byEmail: byEmail || '',
+              date: date || ''
+            });
+
+            await new Promise((resolve, reject) => {
+              const callbackName = 'gsWriteCallback_' + Date.now();
+              const script = document.createElement('script');
+
+              window[callbackName] = function(response) {
+                delete window[callbackName];
+                script.remove();
+                resolve(response);
+              };
+
+              script.onerror = () => reject(new Error('Write failed'));
+              script.src = GOOGLE_SHEET_URL + '?' + params.toString() + '&callback=' + callbackName;
+              document.head.appendChild(script);
+
+              setTimeout(() => reject(new Error('Write timeout')), 10000);
+            });
+
+            console.log(`✓ Sent ${action} update to Google Sheets for book ${bookId}`);
+          } catch (error) {
+            console.warn(`Could not write ${action} to Google Sheets:`, error.message);
+          }
+        }
+
+        // ====================================================================
+        // GOOGLE SHEETS CONFIGURATION
+        // ====================================================================
+        // Set your Google Sheets URL here. Three options:
+        //
+        // Option 1 (RECOMMENDED): Google Apps Script web app URL
+        //   - No CORS issues, works reliably
+        //   - See GOOGLE_SHEETS_SETUP.md for detailed setup instructions
+        //   - Example: 'https://script.google.com/macros/s/ABC123.../exec'
+        //
+        // Option 2: Published CSV URL
+        //   - Simpler but may have CORS issues in some browsers
+        //   - Example: 'https://docs.google.com/.../pub?gid=...&output=csv'
+        //
+        // Option 3: No sync (localStorage only)
+        //   - Set to empty string: ''
+        //   - App works entirely offline
+        //
+        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzYUk_o1WTc1whhn0Y6FqzONenaIjuSUon3pvWXDSC2BMboLnoXncjLg0JCEZTYNac0/exec';
+        // ====================================================================
+        
+        // Fetch data from Google Sheets in the background (app already loaded from localStorage)
+        fetchBooksFromGoogleSheet(GOOGLE_SHEET_URL);
+      </script>
     </body>
 </html>
