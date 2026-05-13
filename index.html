@@ -562,7 +562,11 @@
           </div>
 
           <div class="filters">
-            <input id="langFilter" type="text" placeholder="Filter by language" title="Filter by language">
+            <select id="langFilter" title="Filter by language">
+              <option value="">All languages</option>
+              <option value="English">English</option>
+              <option value="Spanish">Spanish</option>
+            </select>
             <select id="locFilter" title="Filter by location">
               <option value="">All locations</option>
               <option value="Upstairs">Upstairs</option>
@@ -572,7 +576,7 @@
               <option value="Jaelles Room">Jaelle's Room</option>
             </select>
             <button class="btn ghost" id="themeBtn" title="Toggle light/dark mode">🌙</button>
-            <button class="btn ghost" id="myBooksBtn" title="My checked out books" style="display:none">📚 My Books</button>
+            <button class="btn ghost" id="myBooksBtn" title="My checked out books" style="display:none">My Books</button>
             <button class="btn ghost" id="exportBtn">Export</button>
             <button class="btn secondary" id="signinBtn">Sign in</button>
           </div>
@@ -1167,7 +1171,7 @@
           }).join('<hr style="border:none; border-top:1px solid var(--border);">');
 
       const html = `
-        <h3>📚 My Checked Out Books</h3>
+        <h3>My Checked Out Books</h3>
         <div class="small" style="margin-bottom:12px;">Signed in as <strong>${escapeHtml(currentUser.name)}</strong> · ${myBooks.length} book${myBooks.length !== 1 ? 's' : ''} checked out</div>
         <div>${bookRows}</div>
         <div style="margin-top:12px; display:flex; justify-content:flex-end;">
