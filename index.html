@@ -854,9 +854,7 @@
               const checked = b.checkedOut ? true : false;
               return `
                 <div class="book-card" data-id="${b.id}">
-                  <img src="${getCoverUrl(b.isbn, 'M')}"
-                    onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')"
-                    style="width:100%; aspect-ratio:2/3; object-fit:cover; display:block;">
+                  <img src="${getCoverUrl(b.isbn, 'M')}" onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')" style="width:100%; aspect-ratio:2/3; object-fit:cover; display:block;">
                   ${checked ? `<div class="card-checked">Out</div>` : ''}
                   <div class="card-info">
                     <div class="card-title">${escapeHtml(b.title||'Untitled')}</div>
@@ -879,7 +877,7 @@
               return `
                 <div class="${containerClass}" style="display:flex; gap:16px; align-items:flex-start; padding:10px 0; cursor:pointer;" data-id="${b.id}">
                   <div class="book-cover" style="flex:0 0 120px;">
-                    <img src="${getCoverUrl(b.isbn, 'M')}" onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')" style="width:100%; height:120px; object-fit:cover; border-radius:6px;">
+                    <img src="${getCoverUrl(b.isbn, 'M')}" onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')" style="width:100%; height:275px; object-fit:cover; border-radius:6px;">
                   </div>
                   <div style="flex:1;">
                     <div style="display:flex; gap:12px; align-items:flex-start;">
@@ -1249,7 +1247,7 @@
                 return `
                   <div style="display:flex; gap:16px; align-items:flex-start; padding:12px 0;" data-bookid="${escapeHtml(b.id)}">
                     <div style="flex:0 0 80px;">
-                      <img src="${getCoverUrl(b.isbn, 'M')}" onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')" style="width:100%; height:110px; object-fit:cover; border-radius:6px;">
+                      <img src="${getCoverUrl(b.isbn, 'M')}" onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')" style="width:100%; height:275px; object-fit:cover; border-radius:6px;">
                     </div>
                     <div style="flex:1;">
                       <div style="font-weight:700; font-size:15px;">${escapeHtml(b.title||'Untitled')}</div>
