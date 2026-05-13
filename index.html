@@ -393,6 +393,86 @@
           color: var(--text);
         }
 
+        /* grid view */
+        .books-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          gap: 16px;
+          padding: 4px;
+        }
+
+        .books-grid .book-card {
+          display: flex;
+          flex-direction: column;
+          cursor: pointer;
+          border-radius: 8px;
+          overflow: hidden;
+          transition: transform 0.15s, box-shadow 0.15s;
+          background: rgba(255,255,255,0.02);
+          position: relative;
+        }
+
+        .books-grid .book-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .books-grid .book-card img {
+          width: 100%;
+          aspect-ratio: 2/3;
+          object-fit: cover;
+          display: block;
+        }
+
+        .books-grid .book-card .card-info {
+          padding: 8px;
+          flex: 1;
+        }
+
+        .books-grid .book-card .card-title {
+          font-weight: 700;
+          font-size: 12px;
+          line-height: 1.3;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .books-grid .book-card .card-author {
+          font-size: 11px;
+          color: var(--muted);
+          margin-top: 3px;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .books-grid .book-card .card-checked {
+          position: absolute;
+          top: 6px;
+          right: 6px;
+          background: var(--accent-2);
+          color: white;
+          font-size: 10px;
+          padding: 2px 6px;
+          border-radius: 999px;
+          font-weight: 700;
+        }
+
+        :root.light .books-grid .book-card {
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        @media (max-width: 500px) {
+          .books-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+          }
+        }
+
         /* mobile friendly */
 
         @media (max-width:900px){
@@ -577,6 +657,7 @@
                 <option value="Parents Room">Parent's Room</option>
                 <option value="Jaelles Room">Jaelle's Room</option>
               </select>
+              <button class="btn ghost" id="viewToggleBtn" title="Toggle grid/list view">⊞</button>
               <button class="btn ghost" id="themeBtn" title="Toggle light/dark mode">🌙</button>
               <button class="btn ghost" id="myBooksBtn" title="My checked out books" style="display:none">My Books</button>
               <button class="btn ghost" id="exportBtn">Export</button>
@@ -638,6 +719,7 @@
 
         let books = loadBooks();
         let currentUser = loadUser();
+        let currentView = localStorage.getItem('libraryView') || 'list';
 
         // Light mode/dark mode
         let currentTheme = localStorage.getItem('libraryTheme') || 'dark';
@@ -674,6 +756,19 @@
         applyTheme(currentTheme);
         document.getElementById('themeBtn').addEventListener('click', ()=>{
           applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        function applyView(view) {
+          currentView = view;
+          localStorage.setItem('libraryView', view);
+          const btn = document.getElementById('viewToggleBtn');
+          if (btn) btn.textContent = view === 'grid' ? '☰' : '⊞';
+        }
+
+        applyView(currentView);
+        document.getElementById('viewToggleBtn').addEventListener('click', () => {
+          applyView(currentView === 'list' ? 'grid' : 'list');
+          render();
         });
 
         const modalRoot = document.getElementById('modalRoot');
@@ -752,43 +847,62 @@
             return;
           }
 
-          const rows = list.map(b => {
-            const authors = escapeHtml(b.authors || '');
-            const tags = (b.language ? `<span class="tag">${escapeHtml(b.language)}</span>` : '') + (b.pages ? ` <span class="pill">${escapeHtml(b.pages)}p</span>` : '');
-            const qty = `<div class="small">Qty: ${escapeHtml(String(b.quantity||1))}</div>`;
-            const pub = b.published ? `<div class="small">Published: ${escapeHtml(formatDate(b.published))}</div>` : '';
-            const checked = b.checkedOut ? true : false;
-            const checkedBy = checked ? escapeHtml(b.checkedOut.byName || 'Someone') : '';
-            const checkedBadge = checked ? `<span class="pill">Checked out</span>` : '';
-            const containerClass = checked ? 'checked' : '';
-            return `
-              <div class="${containerClass}" style="display:flex; gap:16px; align-items:flex-start; padding:10px 0; cursor:pointer;" data-id="${b.id}">
-                <div class="book-cover" style="flex:0 0 120px;">
-                  <img src="${getCoverUrl(b.isbn, 'M')}" onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')" style="width:100%; border-radius:6px;">
+          let html = '';
+
+          if (currentView === 'grid') {
+            const cards = list.map(b => {
+              const checked = b.checkedOut ? true : false;
+              return `
+                <div class="book-card" data-id="${b.id}">
+                  <img src="${getCoverUrl(b.isbn, 'M')}"
+                    onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')"
+                    style="width:100%; aspect-ratio:2/3; object-fit:cover; display:block;">
+                  ${checked ? `<div class="card-checked">Out</div>` : ''}
+                  <div class="card-info">
+                    <div class="card-title">${escapeHtml(b.title||'Untitled')}</div>
+                    <div class="card-author">${escapeHtml(b.authors||'—')}</div>
+                  </div>
                 </div>
+              `;
+            }).join('');
+            html = `<div class="books-grid">${cards}</div>`;
+          } else {
+            const rows = list.map(b => {
+              const authors = escapeHtml(b.authors || '');
+              const tags = (b.language ? `<span class="tag">${escapeHtml(b.language)}</span>` : '') + (b.pages ? ` <span class="pill">${escapeHtml(b.pages)}p</span>` : '');
+              const qty = `<div class="small">Qty: ${escapeHtml(String(b.quantity||1))}</div>`;
+              const pub = b.published ? `<div class="small">Published: ${escapeHtml(formatDate(b.published))}</div>` : '';
+              const checked = b.checkedOut ? true : false;
+              const checkedBy = checked ? escapeHtml(b.checkedOut.byName || 'Someone') : '';
+              const checkedBadge = checked ? `<span class="pill">Checked out</span>` : '';
+              const containerClass = checked ? 'checked' : '';
+              return `
+                <div class="${containerClass}" style="display:flex; gap:16px; align-items:flex-start; padding:10px 0; cursor:pointer;" data-id="${b.id}">
+                  <div class="book-cover" style="flex:0 0 120px;">
+                    <img src="${getCoverUrl(b.isbn, 'M')}" onerror="tryOlidFallback(this, '${escapeHtml(b.isbn||'')}', 'M')" style="width:100%; height:120px; object-fit:cover; border-radius:6px;">
+                  </div>
+                  <div style="flex:1;">
+                    <div style="display:flex; gap:12px; align-items:flex-start;">
+                      <div style="min-width:6px; height:36px; border-radius:6px; background:linear-gradient(180deg,var(--accent),var(--accent-2));"></div>
+                      <div>
+                        <div style="font-weight:700">${escapeHtml(b.title||'Untitled')} ${checkedBadge}</div>
+                        <div class="small">${authors || '—'}</div>
+                        <div style="margin-top:6px">${tags} ${pub} ${qty}</div>
+                        <div class="small" style="margin-top:6px">${escapeHtml((b.description||'').slice(0,180))}${(b.description||'').length>180 ? '…' : ''}</div>
+                        ${checked ? `<div class="small" style="margin-top:6px">Checked out by <span class="user-badge">${checkedBy}</span></div>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                  <div style="text-align:right; white-space:nowrap;">
+                    ${!isOlid(b.isbn) ? `<div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('<hr style="border:none;border-top:1px solid var(--border)">');
+            html = rows;
+          }
 
-                <div style="flex:1;">
-                  <div style="display:flex; gap:12px; align-items:flex-start;">
-                    <div style="min-width:6px; height:36px; border-radius:6px; background:linear-gradient(180deg,var(--accent),var(--accent-2));"></div>
-                    <div>
-                      <div style="font-weight:700">${escapeHtml(b.title||'Untitled')} ${checkedBadge}</div>
-                      <div class="small">${authors || '—'}</div>
-                      <div style="margin-top:6px">${tags} ${pub} ${qty}</div>
-                      <div class="small" style="margin-top:6px">${escapeHtml((b.description||'').slice(0,180))}${(b.description||'').length>180 ? '…' : ''}</div>
-                ${checked ? `<div class="small" style="margin-top:6px">Checked out by <span class="user-badge">${checkedBy}</span></div>` : ''}
-              </div>
-            </div>
-          </div>
-
-          <div style="text-align:right; white-space:nowrap;">
-            ${!isOlid(b.isbn) ? `<div class="small" style="margin-bottom:6px">ISBN: ${escapeHtml(b.isbn||'—')}</div>` : ''}
-          </div>
-
-        </div>
-            `;
-          }).join('<hr style="border:none;border-top:1px solid var(--border)">');
-
-          booksContainer.innerHTML = rows;
+          booksContainer.innerHTML = html;
 
           booksContainer.querySelectorAll('[data-id]').forEach(el=>{
             el.addEventListener('click', (e)=>{
@@ -1655,7 +1769,7 @@
             searchInput.focus();
             searchInput.select();
           }
-          
+
           if (e.key === 'Escape' && modalRoot.children.length > 0) {
             closeModal();
           }
