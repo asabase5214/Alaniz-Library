@@ -708,6 +708,8 @@
             signinBtn.classList.remove('btn','secondary');
             signinBtn.classList.add('btn','ghost');
             myBooksBtn.style.display = '';
+            const myCount = books.filter(b => b.checkedOut && b.checkedOut.byName === currentUser.name).length;
+            myBooksBtn.textContent = myCount > 0 ? `My Books (${myCount})` : 'My Books';
           } else {
             signinBtn.textContent = 'Sign in';
             signinBtn.classList.remove('btn','ghost');
@@ -1645,6 +1647,18 @@
 
         [searchInput, langFilter, locFilter, sortSelect].forEach(el=>{
           el.addEventListener('input', debounce(render, 180));
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === '/' && document.activeElement !== searchInput) {
+            e.preventDefault();
+            searchInput.focus();
+            searchInput.select();
+          }
+          
+          if (e.key === 'Escape' && modalRoot.children.length > 0) {
+            closeModal();
+          }
         });
 
         function debounce(fn, wait=200){
