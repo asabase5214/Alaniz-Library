@@ -767,6 +767,14 @@
         const LOCATIONS = ['Upstairs', 'Living Room', 'Kitchen', 'Parents Room', 'Jaelles Room'];
         const LANGUAGES = ['English', 'Spanish'];
 
+        function getUniqueLocations() {
+          return [...new Set(books.map(b => (b.location||'').trim()).filter(Boolean))].sort();
+        }
+
+        function getUniqueLanguages() {
+          return [...new Set(books.map(b => (b.language||'').trim()).filter(Boolean))].sort();
+        }
+
         let selectedLocations = new Set();
         let selectedLanguages = new Set();
 
