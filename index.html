@@ -466,6 +466,49 @@
           box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
+        .pill-filter {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          align-items: center;
+        }
+
+        .pill-filter .filter-pill {
+          padding: 4px 10px;
+          border-radius: 999px;
+          font-size: 12px;
+          cursor: pointer;
+          border: 1px solid rgba(96,165,250,0.2);
+          background: transparent;
+          color: var(--muted);
+          font-family: Comfortaa, MuseoModerno, National Park, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+          font-weight: 600;
+          transition: background 0.15s, color 0.15s;
+          user-select: none;
+        }
+
+        .pill-filter .filter-pill.active {
+          background: var(--accent);
+          color: #04203a;
+          border-color: var(--accent);
+        }
+
+        :root.light .pill-filter .filter-pill {
+          border-color: rgba(37,99,235,0.2);
+        }
+
+        :root.light .pill-filter .filter-pill.active {
+          background: var(--accent);
+          color: #ffffff;
+          border-color: var(--accent);
+        }
+
+        @media (max-width: 500px) {
+          .pill-filter {
+            flex-wrap: wrap;
+          }
+        }
+
         @media (max-width: 500px) {
           .books-grid {
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -644,19 +687,8 @@
             </div>
 
             <div class="filters">
-              <select id="langFilter" title="Filter by language">
-                <option value="">All languages</option>
-                <option value="English">English</option>
-                <option value="Spanish">Spanish</option>
-              </select>
-              <select id="locFilter" title="Filter by location">
-                <option value="">All locations</option>
-                <option value="Upstairs">Upstairs</option>
-                <option value="Living Room">Living Room</option>
-                <option value="Kitchen">Kitchen</option>
-                <option value="Parents Room">Parent's Room</option>
-                <option value="Jaelles Room">Jaelle's Room</option>
-              </select>
+              <div id="langFilter" class="pill-filter" title="Filter by language"></div>
+              <div id="locFilter" class="pill-filter" title="Filter by location"></div>
               <button class="btn ghost" id="viewToggleBtn" title="Toggle grid/list view">⊞</button>
               <button class="btn ghost" id="themeBtn" title="Toggle light/dark mode">🌙</button>
               <button class="btn ghost" id="myBooksBtn" title="My checked out books" style="display:none">My Books</button>
@@ -680,7 +712,7 @@
         </aside>
       </div>
 
-      <div><button class="btn ghost" id="ScrollToTopBtn" title="Scroll to top" style="position: fixed; bottom: 20px; right: 20px;" onclick="scrollToTopSmooth()">⮝</button></div>
+      <div><button class="btn ghost" id="ScrollToTopBtn" title="Scroll to top" style="position: fixed; bottom: 20px; right: 20px;" onclick="scrollToTopSmooth()">↑</button></div>
 
       <div id="modalRoot" aria-hidden="true"></div>
 
@@ -722,6 +754,35 @@
         let books = loadBooks();
         let currentUser = loadUser();
         let currentView = localStorage.getItem('libraryView') || 'list';
+
+        const LOCATIONS = ['Upstairs', 'Living Room', 'Kitchen', 'Parents Room', 'Jaelles Room'];
+        const LANGUAGES = ['English', 'Spanish'];
+
+        let selectedLocations = new Set();
+        let selectedLanguages = new Set();
+
+        function buildPillFilters() {
+          function buildPills(container, options, selectedSet) {
+            container.innerHTML = '';
+            options.forEach(opt => {
+              const pill = document.createElement('button');
+              pill.className = 'filter-pill' + (selectedSet.has(opt) ? ' active' : '');
+              pill.textContent = opt;
+              pill.addEventListener('click', () => {
+                if (selectedSet.has(opt)) {
+                  selectedSet.delete(opt);
+                } else {
+                  selectedSet.add(opt);
+                }
+                pill.classList.toggle('active', selectedSet.has(opt));
+                render();
+              });
+              container.appendChild(pill);
+            });
+          }
+          buildPills(langFilterEl, LANGUAGES, selectedLanguages);
+          buildPills(locFilterEl, LOCATIONS, selectedLocations);
+        }
 
         // Light mode/dark mode
         let currentTheme = localStorage.getItem('libraryTheme') || 'dark';
@@ -793,8 +854,8 @@
 
         const booksContainer = document.getElementById('booksContainer');
         const searchInput = document.getElementById('searchInput');
-        const langFilter = document.getElementById('langFilter');
-        const locFilter = document.getElementById('locFilter');
+        const langFilterEl = document.getElementById('langFilter');
+        const locFilterEl = document.getElementById('locFilter');
         const sortSelect = document.getElementById('sortSelect');
         const signinBtn = document.getElementById('signinBtn');
         const ScrollToTopBtn = document.getElementById('ScrollToTopBtn');
@@ -824,14 +885,16 @@
           }
 
           const q = searchInput.value.trim().toLowerCase();
-          const langQ = langFilter.value.trim().toLowerCase();
-          const locQ = locFilter.value.trim().toLowerCase();
           const sortBy = sortSelect.value;
 
           let list = [...books];
 
-          if(langQ) list = list.filter(b => (b.language||'').toLowerCase().includes(langQ));
-          if(locQ) list = list.filter(b => (b.location||'').toLowerCase().includes(locQ));
+          if(selectedLanguages.size > 0) {
+            list = list.filter(b => selectedLanguages.has((b.language||'').trim()));
+          }
+          if(selectedLocations.size > 0) {
+            list = list.filter(b => selectedLocations.has((b.location||'').trim()));
+          }
 
           if(q){
             list = list.filter(b => {
@@ -1776,9 +1839,11 @@
           return s;
         }
 
-        [searchInput, langFilter, locFilter, sortSelect].forEach(el=>{
+        [searchInput, sortSelect].forEach(el=>{
           el.addEventListener('input', debounce(render, 180));
         });
+
+        buildPillFilters();
 
         document.addEventListener('keydown', (e) => {
           if (e.key === '/' && document.activeElement !== searchInput) {
