@@ -680,7 +680,7 @@
         </aside>
       </div>
 
-      <div><button class="btn ghost" id="ScrollToTopBtn" title="Scroll to top" style="position: fixed; top: 20px; right: 20px;">^</button></div>
+      <div><button class="btn ghost" id="ScrollToTopBtn" title="Scroll to top" style="position: fixed; top: 20px; right: 20px;" onclick="scrollToTopSmooth()">Ʌ</button></div>
 
       <div id="modalRoot" aria-hidden="true"></div>
 
@@ -1229,6 +1229,14 @@
         document.getElementById('myBooksBtn').addEventListener('click', ()=>{
           openMyBooksModal();
         });
+
+        function scrollToTopSmooth() {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
 
         function openMyBooksModal(){
           if(!currentUser || !currentUser.name) return;
