@@ -927,7 +927,7 @@
           }
 
           list.sort((a,b)=>{
-            if(sortBy==='title') return (a.title||'').localeCompare(b.title||'');
+            if(sortBy==='title') return fileTitle(a.title||'').localeCompare(fileTitle(b.title||''));
             if (sortBy === 'authors') {
               const lastNameA = (a.authors || '').split(' ').pop();
               const lastNameB = (b.authors || '').split(' ').pop();
@@ -1823,6 +1823,10 @@
 
         function isOlid(val) {
           return val && val.toString().trim().toUpperCase().startsWith('OL');
+        }
+
+        function fileTitle(title) {
+          return title.replace(/^(the|a|an)\s+/i, '').trim();
         }
 
         function formatDate(dateStr) {
