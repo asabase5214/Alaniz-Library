@@ -1005,7 +1005,6 @@
           area.innerHTML = `
             <div><strong>${count}</strong> titles · <strong>${total}</strong> copies</div>
             <div class="small">Checked out: ${checkedCount} · Languages: ${langs.length || 0}</div>
-            <div style="margin-top:8px">${langs.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join(' ') || '<span class="small">No languages set</span>'}</div>
             <hr style="border:none; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0;">
             <div class="small" style="margin-bottom:6px"><strong>Fun facts</strong></div>
             ${longest ? `<div class="small">Longest book: <strong>${escapeHtml(longest.title)}</strong> (${longest.pages}p)</div><br>` : ''}
