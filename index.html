@@ -507,6 +507,11 @@
           .pill-filter {
             flex-wrap: wrap;
           }
+
+          .filter-pill {
+            flex: 0 0 auto !important;
+            width: auto !important;
+          }
         }
 
         @media (max-width: 500px) {
@@ -635,8 +640,12 @@
           }
 
           .filters select,
-          .filters input,
-          .filters button {
+          .filters input {
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          .filters button:not(.filter-pill) {
             width: 100%;
             box-sizing: border-box;
           }
@@ -762,8 +771,13 @@
         let selectedLanguages = new Set();
 
         function buildPillFilters() {
-          function buildPills(container, options, selectedSet) {
+          function buildPills(container, options, selectedSet, label) {
             container.innerHTML = '';
+            const labelEl = document.createElement('span');
+            labelEl.className = 'small';
+            labelEl.style.cssText = 'margin-right:4px; white-space:nowrap; align-self:center;';
+            labelEl.textContent = label + ':';
+            container.appendChild(labelEl);
             options.forEach(opt => {
               const pill = document.createElement('button');
               pill.className = 'filter-pill' + (selectedSet.has(opt) ? ' active' : '');
@@ -780,8 +794,8 @@
               container.appendChild(pill);
             });
           }
-          buildPills(langFilterEl, LANGUAGES, selectedLanguages);
-          buildPills(locFilterEl, LOCATIONS, selectedLocations);
+          buildPills(langFilterEl, getUniqueLanguages(), selectedLanguages, 'Language');
+          buildPills(locFilterEl, getUniqueLocations(), selectedLocations, 'Location');
         }
 
         // Light mode/dark mode
