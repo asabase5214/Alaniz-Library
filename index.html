@@ -797,13 +797,15 @@
         const locFilter = document.getElementById('locFilter');
         const sortSelect = document.getElementById('sortSelect');
         const signinBtn = document.getElementById('signinBtn');
-
         const ScrollToTopBtn = document.getElementById('ScrollToTopBtn');
-        if (window.scrollY === 0) {
-            ScrollToTopBtn.style.visibility = "hidden";
-        }else{
-          ScrollToTopBtn.style.visibility = "visible";
-        }
+
+        window.addEventListener('scroll', function () {
+          if (window.scrollY === 0) {
+              ScrollToTopBtn.style.visibility = "hidden";
+          }else{
+            ScrollToTopBtn.style.visibility = "visible";
+          };
+        });
 
         function render(){
           const myBooksBtn = document.getElementById('myBooksBtn');
