@@ -687,7 +687,6 @@
           <div class="controls">
             <div class="searchbar" title="Search">
               <input id="searchInput" type="search" placeholder="Search title, authors, ISBN, language, location" aria-label="Search books" title="Search title, authors, ISBN, language, location">
-              <button id="clearSearch" style="display:none; background:transparent; border:0; color:var(--muted); cursor:pointer; padding:4px 6px; font-size:16px; line-height:1;" title="Clear search">✕</button>
               <select id="sortSelect" title="Sort">
                 <option value="title">Sort: Title</option>
                 <option value="authors">Sort: Authors</option>
@@ -1867,17 +1866,6 @@
 
         [searchInput, sortSelect].forEach(el=>{
           el.addEventListener('input', debounce(render, 180));
-        });
-
-        const clearSearch = document.getElementById('clearSearch');
-        searchInput.addEventListener('input', () => {
-          clearSearch.style.display = searchInput.value ? '' : 'none';
-        });
-        clearSearch.addEventListener('click', () => {
-          searchInput.value = '';
-          clearSearch.style.display = 'none';
-          searchInput.focus();
-          render();
         });
 
         buildPillFilters();
